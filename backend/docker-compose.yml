@@ -20,9 +20,10 @@ services:
                ./manage.py runserver 0.0.0.0:8000"
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DATABASE_URL: ${DATABASE_URL}
       POSTGRES_CHECK_TIMEOUT: ${POSTGRES_CHECK_TIMEOUT}
       POSTGRES_CHECK_INTERVAL: ${POSTGRES_CHECK_INTERVAL}
+      POSTGRES_HOST: ${POSTGRES_HOST}
     volumes:
       - .:/code
     ports:
