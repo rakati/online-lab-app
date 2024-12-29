@@ -24,6 +24,7 @@ class Common(Configuration):
 
         # Your apps
         'online_lab_app.users',
+        'labs',
 
     )
 
