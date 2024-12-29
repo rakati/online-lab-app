@@ -7,7 +7,7 @@ Backend for the Online Lab Application. Check out the project's [documentation](
 
 # Prerequisites
 
-- [Docker](https://docs.docker.com/docker-for-mac/install/)  
+- [Docker](https://docs.docker.com/docker-for-mac/install/)
 
 # Local Development
 
@@ -21,3 +21,12 @@ Run a command inside the docker container:
 ```bash
 docker-compose run --rm web [command]
 ```
+
+## Testing
+### Test JWT Endpoints getting token
+1. Create super user using: `python manage.py createsuperuser`
+2. request token from the api using
+```bash
+curl -X POST http://localhost:8000/api/token/ -d "username=<testuser>&password=<password123>"
+```
+*Note: Make sure to replace placeholder `<>` with you info.*
