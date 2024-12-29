@@ -12,7 +12,7 @@ config = {
     "dbname": os.getenv("POSTGRES_DB", "postgres"),
     "user": os.getenv("POSTGRES_USER", "postgres"),
     "password": os.getenv("POSTGRES_PASSWORD", ""),
-    "host": os.getenv("POSTGRES_HOST", "postgres"),  # Use POSTGRES_HOST instead of DATABASE_URL
+    "host": os.getenv("POSTGRES_HOST", "postgres"),
 }
 
 # Setup logger
