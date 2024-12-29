@@ -12,7 +12,7 @@ config = {
     "dbname": os.getenv("POSTGRES_DB", "postgres"),
     "user": os.getenv("POSTGRES_USER", "postgres"),
     "password": os.getenv("POSTGRES_PASSWORD", ""),
-    "host": os.getenv("DATABASE_URL", "postgres"),
+    "host": os.getenv("POSTGRES_HOST", "postgres"),  # Use POSTGRES_HOST instead of DATABASE_URL
 }
 
 # Setup logger
@@ -29,8 +29,8 @@ def pg_isready(dbname, user, password, host):
             logger.info("Postgres is ready! ✨ 💅")
             conn.close()
             return True
-        except psycopg2.OperationalError:
-            logger.info(f"Postgres isn't ready. Waiting for {check_interval} {interval_unit}...")
+        except psycopg2.OperationalError as e:
+            logger.info(f"Postgres isn't ready: {e}")
             sleep(check_interval)
 
     logger.error(f"We could not connect to Postgres within {check_timeout} seconds.")
