@@ -1,28 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const SplitPage = () => {
+const LabPage = () => {
+  const [leftWidth, setLeftWidth] = useState(50);
+
+  const handleResize = (e) => {
+    const newWidth = (e.clientX / window.innerWidth) * 100;
+    setLeftWidth(Math.min(Math.max(newWidth, 20), 80)); // Limit resizing between 20% and 80%
+  };
+
   return (
     <div className="flex h-screen">
       {/* Tutorial Section */}
-      <div className="w-1/2 bg-gray-100 p-4 overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">Tutorial</h2>
-        <p>
-          Welcome to the tutorial section! Here, you'll find step-by-step instructions
-          for completing your lab.
+      <div
+        className="bg-gray-800 p-4 overflow-y-auto"
+        style={{ width: `${leftWidth}%` }}
+      >
+        <h2 className="text-2xl font-bold mb-4 text-white">Tutorial</h2>
+        <p className="text-gray-300">
+          Welcome to the tutorial section. Follow these instructions to
+          complete the lab.
         </p>
-        <ol className="list-decimal list-inside">
-          <li>Step 1: Do this...</li>
-          <li>Step 2: Do that...</li>
-          <li>Step 3: Complete the lab!</li>
-        </ol>
       </div>
 
+      {/* Resizer */}
+      <div
+        className="bg-gray-600 cursor-col-resize"
+        style={{ width: '5px' }}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          document.addEventListener('mousemove', handleResize);
+          document.addEventListener('mouseup', () => {
+            document.removeEventListener('mousemove', handleResize);
+          });
+        }}
+      ></div>
+
       {/* Theia IDE Section */}
-      <div className="w-1/2 bg-white p-4">
-        <h2 className="text-2xl font-bold mb-4">Theia IDE</h2>
+      <div className="bg-gray-700 p-4 flex-grow">
         <iframe
           src="http://example.com"
-          className="w-full h-full border"
+          className="w-full h-full border-0"
           title="Theia IDE"
         ></iframe>
       </div>
@@ -30,4 +47,4 @@ const SplitPage = () => {
   );
 };
 
-export default SplitPage;
+export default LabPage;
