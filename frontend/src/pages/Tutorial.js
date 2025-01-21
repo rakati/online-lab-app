@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { FaPrint, FaPlus, FaMinus } from 'react-icons/fa';
 
 const Tutorial = ({ markdownContent }) => {
   const [zoom, setZoom] = useState(100);
+  const printRef = useRef();
 
   const handleZoomIn = () => setZoom((prev) => Math.min(prev + 10, 200));
   const handleZoomOut = () => setZoom((prev) => Math.max(prev - 10, 50));
-  const handlePrint = () => window.print();
+  const handlePrint = () => {
+    if (printRef.current) {
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <html>
+          <head>
+            <tfaritle>Print Tutorial</tfaritle>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 20px; }
+            </style>
+          </head>
+          <body>
+            ${printRef.current.innerHTML}
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.print();
+    }
+  };
 
   return (
     <div
@@ -28,7 +48,10 @@ const Tutorial = ({ markdownContent }) => {
           </button>
         </div>
       </div>
-      <ReactMarkdown>{markdownContent}</ReactMarkdown>
+      {/* Tutorial Content */}
+      <div ref={printRef}>
+        <ReactMarkdown>{markdownContent}</ReactMarkdown>
+      </div>
     </div>
   );
 };
