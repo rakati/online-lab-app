@@ -1,22 +1,38 @@
-import React from 'react';
+import React, { useState} from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Header from './pages/Header';
-import Login from './pages/Login';
-import Profile from './pages/Profile';
-import Lab from './pages/Lab';
+import Sidebar from './components/Sidebar';
+import LabPage from './pages/LabPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage';
+import LandingPage from './pages/LandingPage';
 
 function App() {
-  return (
-    <div>
-      <Header />
-      <h1>Online Lab Application</h1>
+  const [theme, setTheme] = useState('dark');
 
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/lab" element={<Lab />} />
-      </Routes>
-    </div>
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    document.documentElement.classList.toggle('dark');
+  };
+
+  return (
+    <div className={theme === 'dark' ? 'dark' : ''}>
+        <div className="flex">
+          {/* Sidebar */}
+          <Sidebar theme={theme} toggleTheme={toggleTheme} />
+
+          {/* Main Content */}
+          <div className="flex-1">
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/lab" element={<LabPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+            </Routes>
+          </div>
+        </div>
+      </div>
   );
 }
 
