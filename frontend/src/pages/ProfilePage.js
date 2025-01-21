@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 
-const Profile = () => {
+const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
@@ -57,4 +57,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;
