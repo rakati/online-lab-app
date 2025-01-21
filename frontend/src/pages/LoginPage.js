@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { login } from '../services/api';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const data = await login(username, password);
       localStorage.setItem('access', data.access);
       localStorage.setItem('refresh', data.refresh);
-      alert('Login successful!');
+      navigate('/lab');
     } catch (err) {
       setError('Invalid credentials');
     }
@@ -20,7 +22,7 @@ const LoginPage = () => {
 
   return (
     <div className="bg-gray-900 text-white min-h-screen flex items-center justify-center">
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-8 rounded shadow-md w-96">
+      <form onSubmit={handleLogin} className="bg-gray-800 p-8 rounded shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4">Login</h2>
         <div className="mb-4">
           <label className="block text-gray-300 mb-1">Username</label>
@@ -49,7 +51,7 @@ const LoginPage = () => {
           Login
         </button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="text-red-500 mb-4">{error}</p>}
     </div>
   );
 };
