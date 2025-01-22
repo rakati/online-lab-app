@@ -20,12 +20,12 @@ function App() {
   return (
     <AuthProvider>
       <div className={theme === 'dark' ? 'dark' : ''}>
-          <div className="flex">
+          <div className="flex h-screen">
             {/* Sidebar */}
             <Sidebar theme={theme} toggleTheme={toggleTheme} />
 
             {/* Main Content */}
-            <div className="flex-1">
+            <div className="flex-1 overflow-y-auto bg-gray-900 text-gray-300">
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/lab" element={<LabPage />} />
