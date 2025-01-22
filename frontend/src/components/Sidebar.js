@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaSync, FaUser, FaMoon, FaSun } from 'react-icons/fa';
+import { ImLab } from "react-icons/im";
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar = ({ theme, toggleTheme }) => {
@@ -28,6 +29,10 @@ const Sidebar = ({ theme, toggleTheme }) => {
         <button onClick={toggleTheme} className="hover:text-gray-300" title="Toggle Theme">
           {theme === 'dark' ? <FaSun size={24} /> : <FaMoon size={24} />}
         </button>
+
+        <Link to="/lab" className="text-bold hover:text-gray-300" title="Go to Lab">
+          <ImLab size={24} />
+        </Link>
 
         {/* User Icon */}
         <div className="p-2 hover:bg-gray-700 rounded-full">
