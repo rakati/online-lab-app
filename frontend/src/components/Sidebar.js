@@ -1,39 +1,73 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaSync, FaUser, FaMoon, FaSun, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
+import { FaHome, FaSync, FaUser, FaMoon, FaSun } from 'react-icons/fa';
+import { useAuth } from '../context/AuthContext';
+
 
 const Sidebar = ({ theme, toggleTheme }) => {
+  const { isLoggedIn, logout } = useAuth();
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+
   return (
-    <aside className="h-screen w-16 bg-gray-800 text-white flex flex-col items-center py-4 space-y-4">
-      {/* Home Page */}
-      <Link to="/" className="hover:text-gray-300" title="Home">
-        <FaHome size={24} />
-      </Link>
+    <aside className="h-screen w-16 bg-gray-800 text-white flex flex-col justify-between items-center py-4 fixed">
+      {/* Top Section */}
+      <div className="space-y-6">
+        {/* Home Icon */}
+        <Link to="/" className="hover:text-gray-300" title="Home">
+          <FaHome size={24} />
+        </Link>
+      </div>
 
-      {/* Reset Lab */}
-      <button className="hover:text-gray-300" title="Reset Lab">
-        <FaSync size={24} />
-      </button>
+      {/* Bottom Section */}
+      <div className="relative">
+        {/* Reset Lab */}
+        <Link to="#" className="hover:text-gray-300" title="Reset Lab">
+          <FaSync size={24} />
+        </Link>
 
-      {/* Theme Toggle */}
-      <button onClick={toggleTheme} className="hover:text-gray-300" title="Toggle Theme">
-        {theme === 'dark' ? <FaSun size={24} /> : <FaMoon size={24} />}
-      </button>
+        {/* Theme Toggle */}
+        <Link onClick={toggleTheme} className="hover:text-gray-300" title="Toggle Theme">
+          {theme === 'dark' ? <FaSun size={24} /> : <FaMoon size={24} />}
+        </Link>
 
-      {/* Login */}
-      <Link to="/login" className="hover:text-gray-300" title="Login">
-        <FaSignInAlt size={24} />
-      </Link>
 
-      {/* Register */}
-      <Link to="/register" className="hover:text-gray-300" title="Register">
-        <FaUserPlus size={24} />
-      </Link>
+        {/* User Icon */}
+        <button
+          onClick={() => setUserMenuOpen(!userMenuOpen)}
+          className="hover:text-gray-300"
+          title="User Menu"
+        >
+          <FaUser size={24} />
+        </button>
 
-      {/* Profile */}
-      <Link to="/profile" className="hover:text-gray-300" title="Profile">
-        <FaUser size={24} />
-      </Link>
+        {/* User Dropdown Menu */}
+        {userMenuOpen && (
+          <div className="absolute bottom-16 left-16 bg-gray-700 text-white rounded shadow-lg w-40">
+            {isLoggedIn ? (
+              <>
+                <Link to="/profile" className="block hover:bg-gray-600 p-2 rounded">
+                  Profile
+                </Link>
+                <button
+                  onClick={logout}
+                  className="block hover:bg-gray-600 p-2 rounded"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="block hover:bg-gray-600 p-2 rounded">
+                  Sign In
+                </Link>
+                <Link to="/register" className="block hover:bg-gray-600 p-2 rounded">
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+        )}
+      </div>
     </aside>
   );
 };
