@@ -6,37 +6,37 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
-  useEffect(() => {
-    document.documentElement.className = theme;
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    document.documentElement.className = theme;
+    localStorage.setItem('theme', theme);
   };
 
   return (
-    <div className={theme === 'dark' ? 'dark' : ''}>
-        <div className="flex">
-          {/* Sidebar */}
-          <Sidebar theme={theme} toggleTheme={toggleTheme} />
+    <AuthProvider>
+      <div className={theme === 'dark' ? 'dark' : ''}>
+          <div className="flex">
+            {/* Sidebar */}
+            <Sidebar theme={theme} toggleTheme={toggleTheme} />
 
-          {/* Main Content */}
-          <div className="flex-1">
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/lab" element={<LabPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-            </Routes>
+            {/* Main Content */}
+            <div className="flex-1">
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/lab" element={<LabPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+              </Routes>
+            </div>
           </div>
         </div>
-      </div>
+      </AuthProvider>
   );
 }
 
