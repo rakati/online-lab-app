@@ -50,8 +50,9 @@ const LoginPage = () => {
         >
           Login
         </button>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
       </form>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+
     </div>
   );
 };
