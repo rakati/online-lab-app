@@ -1,5 +1,28 @@
 import React from 'react';
 
+const labs = [
+  {
+    title: 'Kubernetes and OpenShift',
+    description: 'Deploy and manage containerized applications.',
+    image: require('../assets/containers-kubernets.png'),
+  },
+  {
+    title: 'Data Analysis with Python',
+    description: 'Analyze data using Python libraries like Pandas and NumPy.',
+    image: require('../assets/data-analysis-with-python.png'),
+  },
+  {
+    title: 'Data Science 101',
+    description: 'An introduction to data science fundamentals.',
+    image: require('../assets/data-science-101.png'),
+  },
+  {
+    title: 'Introduction to Machine Learning',
+    description: 'Learn the basics of machine learning algorithms.',
+    image: require('../assets/introduction-to-machine-learning.png'),
+  },
+];
+
 const LandingPage = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full bg-gray-900 text-gray-300 p-8">
@@ -17,13 +40,18 @@ const LandingPage = () => {
 
       {/* Easy Labs Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {['Lab 1', 'Lab 2', 'Lab 3', 'Lab 4'].map((lab, index) => (
+        {labs.map((lab, index) => (
           <div
             key={index}
             className="bg-gray-800 text-white p-4 rounded shadow-md hover:bg-gray-700 cursor-pointer"
           >
-            <h2 className="text-xl font-bold mb-2">{lab}</h2>
-            <p className="text-gray-400">An easy lab to get started with.</p>
+          <img
+            src={lab.image}
+            alt={lab.title}
+            className="w-full h-32 object-cover rounded mb-4"
+          />
+          <h2 className="text-xl font-bold mb-2">{lab.title}</h2>
+            <p className="text-gray-400">{lab.description}</p>
           </div>
         ))}
       </div>
