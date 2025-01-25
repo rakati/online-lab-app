@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { login } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login: authenticateUser } = useAuth();
+
+  // Determine where to redirect after login
+  const from = location.state?.from?.pathname || '/';
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -14,7 +20,9 @@ const LoginPage = () => {
       const data = await login(username, password);
       localStorage.setItem('access', data.access);
       localStorage.setItem('refresh', data.refresh);
-      navigate('/lab');
+      authenticateUser(); // Update global login state
+      setError('');
+      navigate(from, { replace: true }); // Redirect to the requested page or fallback to "/"
     } catch (err) {
       setError('Invalid credentials');
     }
@@ -50,8 +58,9 @@ const LoginPage = () => {
         >
           Login
         </button>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
       </form>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+
     </div>
   );
 };
