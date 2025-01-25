@@ -8,7 +8,15 @@ from rest_framework.authtoken.models import Token
 
 
 class User(AbstractUser):
+    """Customize the User model"""
+
+    ROLE_CHOICES = (
+        ("admin", "Admin"),
+        ("instructor", "Instructor"),
+        ("student", "Student"),
+    )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="student")
 
     def __str__(self):
         return self.username
