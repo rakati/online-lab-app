@@ -12,7 +12,7 @@ const LandingPage = () => {
       <img
         src={require("../classroom_preview.png")}
         alt="Lab Preview"
-        className="w-full h-auto rounded shadow-md mb-6"
+        className="w-full max-w-3xl h-auto rounded shadow-md mb-6"
       />
 
       {/* Easy Labs Section */}
