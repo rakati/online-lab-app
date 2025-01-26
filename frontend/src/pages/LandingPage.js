@@ -25,8 +25,9 @@ const labs = [
 
 const LandingPage = () => {
   return (
+    <div className="container mx-auto max-w-6xl px-4">
     <div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen px-8 py-16">
-      <h1 className="text-4xl font-bold mb-4">Welcome to the Online Lab Application</h1>
+      <h1 className="text-4xl font-bold mb-4 text-center">Welcome to the Online Lab Application</h1>
       <p className="text-gray-600 dark:text-gray-400 text-center mb-6">
         Explore interactive programming labs and tutorials to improve your skills.
       </p>
@@ -35,7 +36,7 @@ const LandingPage = () => {
       <img
         src={require("../classroom_preview.png")}
         alt="Lab Preview"
-        className="w-full max-w-3xl h-auto rounded shadow-md hover:shadow-lg mb-6"
+        className="w-full max-w-4xl h-auto object-cover rounded shadow-md mb-6 mx-auto"
       />
 
       {/* Easy Labs Section */}
@@ -61,7 +62,8 @@ const LandingPage = () => {
           </div>
         ))}
       </div>
-    </div>
+      </div>
+      </div>
   );
 };
 
