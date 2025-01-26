@@ -13,3 +13,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.border-theme {
+	@apply border border-gray-300 dark:border-gray-700 rounded;
+}
+
+.shadow-theme {
+	@apply shadow-md hover:shadow-lg;
+}
