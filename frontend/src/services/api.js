@@ -18,4 +18,11 @@ export const login = async (username, password) => {
   return response.data;
 };
 
+export const register = async (formData) => {
+  const response = await api.post('/users/register/', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }, // For avatar uploads
+  });
+  return response.data;
+};
+
 export default api;
