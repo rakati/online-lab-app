@@ -5,13 +5,20 @@ const api = axios.create({
 });
 
 // Add Authorization header to all requests
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('access'); // Retrieve the access token
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      await refreshToken(); // Refresh the token
+      const token = localStorage.getItem('access');
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      return api(originalRequest); // Retry the original request
+    }
+    return Promise.reject(error);
   }
-  return config;
-});
+);
 
 // Fetch user info
 export const fetchUserInfo = async () => {
@@ -45,6 +52,13 @@ export const register = async (formData) => {
     headers: { 'Content-Type': 'multipart/form-data' }, // For avatar uploads
   });
   return response.data;
+};
+
+// Handle refresh token
+export const refreshToken = async () => {
+  const refresh = localStorage.getItem('refresh');
+  const response = await api.post('/token/refresh/', { refresh });
+  localStorage.setItem('access', response.data.access); // Update the access token
 };
 
 export default api;
