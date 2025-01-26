@@ -9,11 +9,11 @@ const Sidebar = ({ theme, toggleTheme }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   return (
-    <aside className="h-full w-16 bg-gray-800 text-white flex flex-col justify-between items-center py-4">
+    <aside className="h-full w-16 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col justify-between items-center py-4 border-r border-gray-300 dark:border-gray-700">
       {/* Top Section */}
       <div className="space-y-6 flex flex-col items-center">
         {/* Home Icon */}
-        <Link to="/" className="hover:text-gray-300" title="Home">
+        <Link to="/" className="hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded border border-transparent focus:border-blue-500" title="Home">
           <FaHome size={24} />
         </Link>
       </div>
@@ -21,24 +21,23 @@ const Sidebar = ({ theme, toggleTheme }) => {
       {/* Bottom Section */}
       <div className="space-y-6 flex flex-col items-center relative">
         {/* Reset Lab */}
-        <Link to="#" className="hover:text-gray-300" title="Reset Lab">
+        <Link to="#" className="hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded border border-transparent focus:border-blue-500" title="Reset Lab">
           <FaSync size={24} />
         </Link>
 
         {/* Theme Toggle */}
-        <button onClick={toggleTheme} className="hover:text-gray-300" title="Toggle Theme">
+        <button onClick={toggleTheme} className="hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded border border-transparent focus:border-blue-500" title="Toggle Theme">
           {theme === 'dark' ? <FaSun size={24} /> : <FaMoon size={24} />}
         </button>
 
-        <Link to="/lab" className="text-bold hover:text-gray-300" title="Go to Lab">
+        <Link to="/lab" className="hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded border border-transparent focus:border-blue-500" title="Go to Lab">
           <ImLab size={24} />
         </Link>
 
         {/* User Icon */}
-        <div className="p-2 hover:bg-gray-700 rounded-full">
+        <div className="p-2 hover:bg-gray-200 dark:hover:bg-gray-800 rounded order border-transparent focus:border-blue-500">
           <button
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className="hover:text-gray-300"
             title="User Menu"
           >
             <FaUser size={24} />
@@ -46,25 +45,25 @@ const Sidebar = ({ theme, toggleTheme }) => {
 
           {/* User Dropdown Menu */}
           {userMenuOpen && (
-            <div className="absolute bottom-16 left-16 bg-gray-700 text-white rounded shadow-lg w-48 p-2">
+            <div className="absolute bottom-16 left-16 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded shadow-lg w-48 p-2">
               {isLoggedIn ? (
                 <>
-                  <Link to="/profile" className="block hover:bg-gray-600 py-2 px-4 rounded">
+                  <Link to="/profile" className="block hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded">
                     Profile
                   </Link>
                   <button
                     onClick={logout}
-                    className="block hover:bg-gray-600 py-2 px-4 rounded w-full text-left"
+                    className="block hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded w-full text-left"
                   >
                     Logout
                   </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="block hover:bg-gray-600 py-2 px-4 rounded">
+                  <Link to="/login" className="block hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded">
                     Sign In
                   </Link>
-                  <Link to="/register" className="block hover:bg-gray-600 py-2 px-4 rounded">
+                  <Link to="/register" className="block hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded">
                     Sign Up
                   </Link>
                 </>
