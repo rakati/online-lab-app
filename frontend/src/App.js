@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import LabPage from './pages/LabPage';
@@ -6,11 +6,18 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
+import CreateLabPage from './pages/CreateLabPage';
+import LabsPage from './pages/LabsPage';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.className = theme;
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
@@ -20,7 +27,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className={theme === 'dark' ? 'dark' : ''}>
+      <div className={theme}>
           <div className="flex h-screen">
             {/* Sidebar */}
             <Sidebar theme={theme} toggleTheme={toggleTheme} />
@@ -34,6 +41,22 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <LabPage />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="/labs"
+                  element={
+                    <ProtectedRoute>
+                      <LabsPage />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="/add-lab"
+                  element={
+                    <ProtectedRoute>
+                      <CreateLabPage />
                     </ProtectedRoute>
                   }
                 />
