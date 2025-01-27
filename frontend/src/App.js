@@ -33,7 +33,7 @@ function App() {
             <Sidebar theme={theme} toggleTheme={toggleTheme} />
 
             {/* Main Content */}
-            <div className="flex-1 overflow-y-auto bg-gray-900 text-gray-300">
+            <div className="flex-1 overflow-y-auto g-white dark:bg-gray-900 text-gray-300">
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route
