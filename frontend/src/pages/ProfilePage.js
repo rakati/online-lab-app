@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { fetchUserInfo, updateProfile, changePassword } from '../services/api';
 
 const ProfilePage = () => {
@@ -10,7 +10,8 @@ const ProfilePage = () => {
     birthday: '',
     avatar: '',
   });
-  const initialUserInfo = { ...userInfo}
+
+  const initialUserInfo = useRef(null);
   const [editMode, setEditMode] = useState(false);
   const [passwordData, setPasswordData] = useState({
     oldPassword: '',
@@ -25,6 +26,9 @@ const ProfilePage = () => {
       try {
         const data = await fetchUserInfo();
         setUserInfo(data);
+        const initialUserInfo = JSON.parse(JSON.stringify(data)); // Deep copy
+        console.log('Initial User Info:', initialUserInfo);
+        console.log('Current User Info:', userInfo);
       } catch (error) {
         setMessage('Failed to load user information.');
       }
@@ -44,25 +48,28 @@ const ProfilePage = () => {
   };
 
   const handleUpdateInfo = async () => {
-  try {
-    // Create a FormData object to send only modified fields
-    const formData = new FormData();
-    Object.keys(userInfo).forEach((key) => {
-      // Check if the field has been modified
-      if (userInfo[key] !== initialUserInfo[key]) {
-        if (key === 'avatar' && userInfo[key] === null) return; // Skip empty avatar
-        formData.append(key, userInfo[key]);
-      }
-    });
+    try {
+      // Create a FormData object to send only modified fields
+      const formData = new FormData();
+      Object.keys(userInfo).forEach((key) => {
+        const backendKey = key === 'firstName' ? 'first_name' : key === 'lastName' ? 'last_name' : key;
+        if (userInfo[key] !== initialUserInfo[key]) {
+          if (key === 'avatar' && userInfo[key] === null) return; // Skip empty avatar
+          console.log('adding data');
+          formData.append(backendKey, userInfo[key]);
+        }
+      });
 
-    // Make the API call
-    await updateProfile(formData);
-    setMessage('Profile updated successfully!');
-    setEditMode(false);
-  } catch (error) {
-    setMessage('Failed to update profile.');
-  }
-};
+      // Make the API call
+      console.log('form data: ....', {...formData});
+      const response = await updateProfile(formData);
+      console.log('API Response:', response);
+      setMessage('Profile updated successfully!');
+      setEditMode(false);
+    } catch (error) {
+      setMessage('Failed to update profile.');
+    }
+  };
 
   const handleChangePassword = async () => {
     // Validate only when the user submits

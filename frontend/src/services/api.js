@@ -23,12 +23,20 @@ api.interceptors.response.use(
 // Fetch user info
 export const fetchUserInfo = async () => {
   const response = await api.get('/users/profile/');
-  return response.data;
+  const data = response.data;
+
+  // Normalize field names (snake_case to camelCase)
+  return {
+    ...data,
+    firstName: data.first_name,
+    lastName: data.last_name,
+    birthday: data.birthday,
+  };
 };
 
 // Update profile
 export const updateProfile = async (formData) => {
-  const response = await api.put('/users/profile/', formData, {
+  const response = await api.patch('/users/profile/', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }, // Handle file uploads
   });
   return response.data;
