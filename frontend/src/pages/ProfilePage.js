@@ -104,7 +104,7 @@ const ProfilePage = () => {
         <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded shadow-lg mb-8">
           <div className="flex items-center mb-4">
             <img
-              src={userInfo.avatar || 'https://via.placeholder.com/100'}
+              src={userInfo.avatar || require("../assets/default-avatar.jpg")}
               alt="Profile"
               className="w-24 h-24 rounded-full object-cover mr-4 border border-gray-300 dark:border-gray-700"
             />
