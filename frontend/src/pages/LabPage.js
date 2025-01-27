@@ -1,19 +1,38 @@
 import React, { useState } from 'react';
 import Tutorial from './Tutorial';
 import TheiaPanel from './TheiaPanel';
+import markdownContents from './MarkdownText'
 
 const LabPage = () => {
-  const markdownContent = `
-# Getting Started with Node.js
-Follow these steps to complete the lab:
-## What You Will Learn
-1. Set up Node.js.
-2. Write and run a simple program.
-3. Customize the project.
+  let markdownContent = `
+# Welcome to the Lab
+Learn how to write clean and beautiful Markdown with styled code snippets.
 
-**Let's get started!**
-  `;
+## Features
+- Dynamic Theme Toggle
+- Styled Headers
+- Code Snippet Support
 
+### Code Snippet Example
+\`\`\`javascript
+function add(a, b) {
+  return a + b;
+}
+
+console.log(add(2, 3)); // Output: 5
+\`\`\`
+
+Visit [our website](https://example.com) for more tutorials.
+here is simple python code:
+\`\`\`python
+import numpy as np
+
+arr = np.arange(1, 3)
+print(arr)
+
+\`\`\`
+`;
+  markdownContent = markdownContents;
   const [leftWidth, setLeftWidth] = useState(50);
 
   const handleResize = (e) => {

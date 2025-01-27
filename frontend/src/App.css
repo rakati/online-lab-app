@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+/* Scrollbar Styles */
+.scrollbar-thin::-webkit-scrollbar {
+	width: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+	background: var(--tw-scrollbar-thumb, #4b5563);
+	/* Default */
+	border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+	background: var(--tw-scrollbar-thumb-hover, #374151);
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+	background: var(--tw-scrollbar-track, #f3f4f6);
+	/* Default */
+}
