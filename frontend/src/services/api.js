@@ -57,12 +57,12 @@ export const login = async (username, password) => {
 
 // handle register
 export const register = async (formData) => {
-  const response = await api.post('/users/register/', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }, // For avatar uploads
+  const convertedData = convertKeysToSnakeCase(formData);
+  const response = await axios.post('http://localhost:8000/api/users/register/', convertedData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
-  return response.data;
+  return convertKeysToCamelCase(response.data);
 };
-
 // Handle refresh token
 export const refreshToken = async () => {
   const refresh = localStorage.getItem('refresh');
