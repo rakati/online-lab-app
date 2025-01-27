@@ -50,6 +50,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
+        # remove birthday if empty
+        if "birthday" in validated_data and not validated_data["birthday"]:
+            validated_data.pop("birthday")
         password = validated_data.pop("password")
         user = User(**validated_data)
         user.set_password(password)
