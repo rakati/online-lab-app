@@ -21,24 +21,26 @@ const RegisterPage = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    // Frontend validation for required fields
+    if (!formData.username || !formData.password || !formData.email) {
+      setError('Please fill in all required fields.');
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Invalid email format');
+      return;
+    }
+
+
     try {
-      // Validate fields
-      if (!formData.firstName || !formData.lastName || !formData.email || !formData.username || !formData.password) {
-        setError('All fields are required');
-        return;
-      }
-
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email)) {
-        setError('Invalid email format');
-        return;
-      }
-
-      // Backend API call
       await register(formData);
       navigate('/login'); // Redirect to login after successful registration
     } catch (err) {
+      console.error(err);
       setError('Failed to register. Please try again.');
     }
   };
@@ -76,7 +78,9 @@ const RegisterPage = () => {
 
         {/* Email */}
         <div className="mb-4">
-          <label className="block text-gray-900 dark:text-gray-200 mb-1">Email</label>
+          <label className="block text-gray-900 dark:text-gray-200 mb-1">
+            Email <span className="text-red-500">*</span>
+          </label>
           <input
             type="email"
             name="email"
@@ -89,7 +93,9 @@ const RegisterPage = () => {
 
         {/* Username */}
         <div className="mb-4">
-          <label className="block text-gray-900 dark:text-gray-200 mb-1">Username</label>
+          <label className="block text-gray-900 dark:text-gray-200 mb-1">
+            Username <span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
             name="username"
@@ -102,7 +108,7 @@ const RegisterPage = () => {
 
         {/* Password */}
         <div className="mb-4">
-          <label className="block text-gray-900 dark:text-gray-200 mb-1">Password</label>
+          <label className="block text-gray-900 dark:text-gray-200 mb-1">Password <span className="text-red-500">*</span></label>
           <input
             type="password"
             name="password"
