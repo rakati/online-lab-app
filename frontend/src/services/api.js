@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { convertKeysToSnakeCase, convertKeysToCamelCase } from '../utils/caseConverter';
 
 const api = axios.create({
   baseURL: 'http://localhost:8000/api',
@@ -20,31 +21,31 @@ api.interceptors.response.use(
   }
 );
 
-// Fetch user info
+/**
+ * Fetch user info
+ */
 export const fetchUserInfo = async () => {
   const response = await api.get('/users/profile/');
-  const data = response.data;
-
-  // Normalize field names (snake_case to camelCase)
-  return {
-    ...data,
-    firstName: data.first_name,
-    lastName: data.last_name,
-    birthday: data.birthday,
-  };
+  return convertKeysToCamelCase(response.data);
 };
 
-// Update profile
+/**
+ * Update user profile
+ */
 export const updateProfile = async (formData) => {
-  const response = await api.patch('/users/profile/', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }, // Handle file uploads
+  const convertedData = convertKeysToSnakeCase(formData);
+  const response = await api.patch('/users/profile/', convertedData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
-  return response.data;
+  return convertKeysToCamelCase(response.data);
 };
 
-// Change password
+/**
+ * Change user password
+ */
 export const changePassword = async (passwordData) => {
-  const response = await api.post('/users/change-password/', passwordData);
+  const convertedData = convertKeysToSnakeCase(passwordData);
+  const response = await api.post('/users/change-password/', convertedData);
   return response.data;
 };
 
