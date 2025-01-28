@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleTheme, setTheme } from './store/themeSlice';
 import Sidebar from './components/Sidebar';
 import LabPage from './pages/LabPage';
 import LoginPage from './pages/LoginPage';
@@ -12,25 +14,25 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const dispatch = useDispatch();
+  // Grab the theme from Redux
+  const theme = useSelector((state) => state.theme.theme);
 
+  // On first load, make sure the <html> class is correct
   useEffect(() => {
     document.documentElement.className = theme;
-    localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-    document.documentElement.className = theme;
-    localStorage.setItem('theme', theme);
+  // This is the handler we'll pass down to the sidebar
+  const handleToggleTheme = () => {
+    dispatch(toggleTheme());
   };
 
   return (
     <AuthProvider>
       <div className={theme}>
           <div className="flex h-screen">
-            {/* Sidebar */}
-            <Sidebar theme={theme} toggleTheme={toggleTheme} />
+            <Sidebar theme={theme} toggleTheme={handleToggleTheme} />
 
             {/* Main Content */}
             <div className="flex-1 overflow-y-auto g-white dark:bg-gray-900 text-gray-300">
