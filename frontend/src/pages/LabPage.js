@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Tutorial from './Tutorial';
 import TheiaPanel from './TheiaPanel';
 
 const LabPage = () => {
-  const markdownContent = `
+  let markdownContent = `
 # Getting Started with Node.js
 Follow these steps to complete the lab:
 ## What You Will Learn
@@ -13,6 +14,7 @@ Follow these steps to complete the lab:
 
 **Let's get started!**
   `;
+
 
   const [leftWidth, setLeftWidth] = useState(50);
 
@@ -33,8 +35,8 @@ Follow these steps to complete the lab:
 
         {/* Resizer */}
         <div
-          className="bg-gray-600 cursor-col-resize"
-          style={{ width: '5px' }}
+          className="relative bg-gray-600"
+          style={{ width: '5px', cursor: 'col-resize' }}
           onMouseDown={(e) => {
             e.preventDefault();
             document.addEventListener('mousemove', handleResize);
@@ -42,7 +44,24 @@ Follow these steps to complete the lab:
               document.removeEventListener('mousemove', handleResize);
             });
           }}
-        ></div>
+        >
+          {/* Collapse button */}
+          <button
+            className="absolute -left-4 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1"
+            onClick={() => {
+              if (leftWidth < 5) {
+                // If it's collapsed, restore
+                setLeftWidth(50);
+              } else {
+                // Collapse it
+                setLeftWidth(0);
+              }
+            }}
+          >
+            {/* Icon can depend on isCollapsed */}
+            {leftWidth < 5 ? <FaChevronRight /> : <FaChevronLeft />}
+          </button>
+        </div>
 
         {/* Theia IDE Section */}
         <TheiaPanel />
