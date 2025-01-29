@@ -21,3 +21,77 @@ code {
 .shadow-theme {
 	@apply shadow-md hover:shadow-lg;
 }
+
+/* Tiny Scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+	width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+	background: #4b5563;
+	/* Dark gray */
+	border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+	background: #374151;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+	background: #f3f4f6;
+	/* Light gray */
+}
+
+/* Dark Mode Scrollbar */
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+	background: #6b7280;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-track {
+	background: #1f2937;
+}
+
+/* Ensure Zoom Affects Only Content */
+.tutorial-content {
+	font-size: var(--tutorial-font-size, 100%);
+}
+
+:root {
+	--tutorial-font-size: 100%;
+}
+
+.tutorial-content {
+	font-size: var(--tutorial-font-size);
+	/* Dynamically adjust font size */
+	line-height: 1.5;
+}
+
+.tutorial-content p,
+.tutorial-content li {
+	font-size: inherit;
+	/* Ensure all text elements scale */
+}
+
+.tutorial-content h1,
+.tutorial-content h2,
+.tutorial-content h3 {
+	font-weight: bold;
+}
+
+.tutorial-content pre {
+	overflow-x: auto;
+	padding: 1rem;
+	background-color: #1e293b;
+	/* Dark background for code */
+	border-radius: 4px;
+}
+
+.tutorial-content {
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+
+
+	code, pre {
+		white-space: pre-wrap;
+	}
+}
