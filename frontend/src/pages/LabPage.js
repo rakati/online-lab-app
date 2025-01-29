@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Tutorial from './Tutorial';
 import TheiaPanel from './TheiaPanel';
+import markdownContents from './MarkdownText'
 
 const LabPage = () => {
   let markdownContent = `
@@ -15,8 +16,9 @@ Follow these steps to complete the lab:
 **Let's get started!**
   `;
 
-
+  markdownContent = markdownContents
   const [leftWidth, setLeftWidth] = useState(50);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleResize = (e) => {
     const newWidth = ((e.clientX - 64) / (window.innerWidth - 64)) * 100; // Adjust for sidebar width
@@ -29,14 +31,14 @@ Follow these steps to complete the lab:
       {/* Split Layout */}
       <div className="flex flex-1">
         {/* Tutorial Section */}
-        <div className="bg-gray-100" style={{ width: `${leftWidth}%` }}>
+        <div className="bg-gray-100 relative" style={{ width: `${leftWidth}%` }}>
           <Tutorial markdownContent={markdownContent} />
         </div>
 
         {/* Resizer */}
         <div
-          className="relative bg-gray-600"
-          style={{ width: '5px', cursor: 'col-resize' }}
+          className="relative bg-gray-600 cursor-col-resize"
+          style={{ width: '5px'}}
           onMouseDown={(e) => {
             e.preventDefault();
             document.addEventListener('mousemove', handleResize);
