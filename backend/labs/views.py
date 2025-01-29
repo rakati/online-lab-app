@@ -13,6 +13,13 @@ class LabViewSet(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+    def get_queryset(self):
+        # Possibly filter so instructors only see their own labs,
+        # or superusers can see all. Just an idea:
+        if self.request.user.is_superuser:
+            return Lab.objects.all()
+        return Lab.objects.filter(created_by=self.request.user)
+
 
 class StudentProgressViewSet(ModelViewSet):
     queryset = StudentProgress.objects.all()
