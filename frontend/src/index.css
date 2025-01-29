@@ -76,6 +76,9 @@ code {
 .tutorial-content h2,
 .tutorial-content h3 {
 	font-weight: bold;
+	border-bottom: 2px solid #ddd;
+	margin-top: 4%;
+	margin-bottom: 4%;
 }
 
 .tutorial-content pre {
@@ -94,4 +97,34 @@ code {
 	code, pre {
 		white-space: pre-wrap;
 	}
+}
+
+.tutorial-content table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.tutorial-content th,
+.tutorial-content td {
+	border: 1px solid #ccc;
+	padding: 8px;
+}
+
+.tutorial-content a {
+	color: #1e40af;
+	/* or a different shade of blue */
+	text-decoration: underline;
+}
+
+.tutorial-content blockquote {
+	border-left: 4px solid #ccc;
+	padding-left: 1em;
+	margin: 1em 0;
+	color: #555;
+	/* optional background color or italics, etc. */
+	font-style: italic;
+}
+
+.tutorial-content pre {
+	padding: 1px;
 }
