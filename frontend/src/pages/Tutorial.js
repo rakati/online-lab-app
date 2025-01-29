@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
 import { FaBars, FaPrint, FaPlus, FaMinus, FaTimes } from 'react-icons/fa';
-import 'highlight.js/styles/github-dark.css';
 import 'katex/dist/katex.min.css';
 
 const Tutorial = ({ markdownContent }) => {
@@ -11,6 +11,16 @@ const Tutorial = ({ markdownContent }) => {
   const [zoom, setZoom] = useState(100);
   const contentRef = useRef(null);
   const tocRef = useRef(null);
+  const theme = useSelector(state => state.theme.theme);
+
+  useEffect(() => {
+    console.log('Them state changed', theme);
+    if (theme === 'dark') {
+      import('highlight.js/styles/github-dark.css');
+    } else {
+      import('highlight.js/styles/github.css');
+    }
+  }, [theme]);
 
   useEffect(() => {
     document.documentElement.style.setProperty('--tutorial-font-size', `${zoom}%`);
@@ -102,7 +112,7 @@ const Tutorial = ({ markdownContent }) => {
       {isTocOpen && (
         <div
           ref={tocRef}
-          className="absolute top-0 left-0 z-50 h-full w-64 bg-gray-800 shadow-lg transition-transform transform translate-x-0"
+          className="absolute top-0 left-0 z-50 h-full w-64 bg-gray-100 dark:bg-gray-900 shadow-lg transition-transform transform translate-x-0"
         >
           <div className="p-4 overflow-y-auto h-full scrollbar-thin">
             <div className="flex justify-between items-center mb-4">
@@ -133,7 +143,7 @@ const Tutorial = ({ markdownContent }) => {
       <div
         className="flex-1 overflow-y-auto p-4 scrollbar-thin"
       >
-        <div ref={contentRef} className="tutorial-content break-words">
+        <div ref={contentRef} className="tutorial-content prose dark:prose-invert break-words">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeHighlight]}
