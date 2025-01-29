@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
+import remarkGfm from 'remark-gfm';
 import { FaBars, FaPrint, FaPlus, FaMinus, FaTimes } from 'react-icons/fa';
 import 'highlight.js/styles/github-dark.css';
+import 'katex/dist/katex.min.css';
 
 const Tutorial = ({ markdownContent }) => {
   const [isTocOpen, setIsTocOpen] = useState(false);
@@ -131,8 +133,13 @@ const Tutorial = ({ markdownContent }) => {
       <div
         className="flex-1 overflow-y-auto p-4 scrollbar-thin"
       >
-        <div ref={contentRef} className="tutorial-content">
-          <ReactMarkdown>{markdownContent}</ReactMarkdown>
+        <div ref={contentRef} className="tutorial-content break-words">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeHighlight]}
+          >
+            {markdownContent}
+          </ReactMarkdown>
         </div>
       </div>
     </div>
