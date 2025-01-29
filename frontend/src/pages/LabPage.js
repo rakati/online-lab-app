@@ -31,7 +31,11 @@ Follow these steps to complete the lab:
       {/* Split Layout */}
       <div className="flex flex-1">
         {/* Tutorial Section */}
-        <div className="bg-gray-100 relative" style={{ width: `${leftWidth}%` }}>
+        <div className="bg-gray-100 relative ${
+          leftWidth < 5 ? 'hidden' : ''
+          }`}"
+          style={{ width: `${leftWidth}%` }}
+        >
           <Tutorial markdownContent={markdownContent} />
         </div>
 
@@ -49,7 +53,7 @@ Follow these steps to complete the lab:
         >
           {/* Collapse button */}
           <button
-            className="absolute -left-4 top-1/2 transform -translate-y-1/2 bg-gray-200 rounded-full p-1"
+            className="absolute -left-4 top-1/2 transform -translate-y-1/2 bg-gray-600 rounded-full p-3"
             onClick={() => {
               if (leftWidth < 5) {
                 // If it's collapsed, restore
