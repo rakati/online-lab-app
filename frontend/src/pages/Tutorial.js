@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
+import remarkSlug from 'remark-slug';
 import remarkGfm from 'remark-gfm';
 import { FaBars, FaPrint, FaPlus, FaMinus, FaTimes } from 'react-icons/fa';
 import 'katex/dist/katex.min.css';
@@ -14,7 +15,6 @@ const Tutorial = ({ markdownContent }) => {
   const theme = useSelector(state => state.theme.theme);
 
   useEffect(() => {
-    console.log('Them state changed', theme);
     if (theme === 'dark') {
       import('highlight.js/styles/github-dark.css');
     } else {
@@ -145,7 +145,7 @@ const Tutorial = ({ markdownContent }) => {
       >
         <div ref={contentRef} className="tutorial-content prose dark:prose-invert break-words">
           <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
+            remarkPlugins={[remarkGfm, remarkSlug]}
             rehypePlugins={[rehypeHighlight]}
           >
             {markdownContent}
