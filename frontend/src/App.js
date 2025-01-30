@@ -10,6 +10,7 @@ import ProfilePage from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
 import CreateLabPage from './pages/CreateLabPage';
 import LabsPage from './pages/LabsPage';
+import DashboardPage from './pages/DashboardPage';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -51,6 +52,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <LabsPage />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardPage />
                     </ProtectedRoute>
                   }
               />
