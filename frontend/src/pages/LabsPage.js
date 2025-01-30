@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
+// src/pages/LabsPage.js
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import LabCard from '../components/LabCard';
+import { useSelector } from 'react-redux'; // or your auth context
 
 const LabsPage = () => {
   const [search, setSearch] = useState('');
-  const labs = [
-    { title: 'Lab 1', description: 'Learn containers.' },
-    { title: 'Lab 2', description: 'Intro to Kubernetes.' },
-  ];
+  const [labs, setLabs] = useState([]);
+  const { user } = useAuth();// or context-based user
+
+  const fetchLabs = () => {
+    fetch('/api/labs/', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => setLabs(data))
+      .catch(err => console.error(err));
+  };
+
+  useEffect(() => {
+    fetchLabs();
+  }, []);
 
   const filteredLabs = labs.filter((lab) =>
     lab.title.toLowerCase().includes(search.toLowerCase())
@@ -13,9 +26,20 @@ const LabsPage = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 px-8 py-16">
-      <h1 className="text-3xl font-bold mb-4">Labs</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">Labs</h1>
+        {/* If user is instructor, show add-lab button */}
+        {user?.is_instructor && (
+          <a
+            href="/add-lab"
+            className="bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            + Add Lab
+          </a>
+        )}
+      </div>
 
-      {/* Search Bar */}
+      {/* Search */}
       <input
         type="text"
         placeholder="Search Labs..."
@@ -24,16 +48,15 @@ const LabsPage = () => {
         className="w-full max-w-md px-4 py-2 rounded mb-6 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
       />
 
-      {/* Lab Cards */}
+      {/* Lab grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredLabs.map((lab, index) => (
-          <div
-            key={index}
-            className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-4 rounded shadow-md"
-          >
-            <h2 className="text-xl font-bold mb-2">{lab.title}</h2>
-            <p>{lab.description}</p>
-          </div>
+        {filteredLabs.map((lab) => (
+          <LabCard
+            key={lab.id}
+            lab={lab}
+            user={user}
+            onRefresh={fetchLabs} // Refresh after subscribe/unsubscribe
+          />
         ))}
       </div>
     </div>
