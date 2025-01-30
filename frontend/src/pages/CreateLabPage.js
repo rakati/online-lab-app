@@ -91,77 +91,79 @@ function CreateLabPage() {
   };
 
   return (
-    <div className="p-4 overflow-auto dark:bg-gray-900 dark:text-gray-200 h-full">
-      <h1 className="text-2xl font-bold mb-4">Create New Lab</h1>
+    <div className="container mx-auto max-w-6xl px-4">
+      <div className="p-4 overflow-auto dark:bg-gray-900 dark:text-gray-200 h-full">
+        <h1 className="text-2xl font-bold mb-4">Create New Lab</h1>
 
-      <div className="mb-4">
-        <label className="block font-semibold mb-1">Title</label>
-        <input
-          className="border border-gray-300 dark:border-gray-700 rounded w-full p-2"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block font-semibold mb-1">Description</label>
-        <textarea
-          className="border border-gray-300 dark:border-gray-700 rounded w-full p-2"
-          rows="3"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block font-semibold mb-1">Packages</label>
-        <div className="flex flex-wrap gap-4">
-          {availablePackages.map((pkg) => (
-            <label key={pkg} className="inline-flex items-center gap-2">
-              <input
-                type="checkbox"
-                value={pkg}
-                checked={packages.includes(pkg)}
-                onChange={handleChangePackages}
-              />
-              <span className="capitalize">{pkg}</span>
-            </label>
-          ))}
+        <div className="mb-4">
+          <label className="block font-semibold mb-1">Title</label>
+          <input
+            className="border border-gray-300 dark:border-gray-700 rounded w-full p-2"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
         </div>
-      </div>
 
-      <div className="mb-4">
-        <label className="block font-semibold mb-2">Instructions</label>
-        <MarkdownEditor
-          // For advanced usage, you can customize the config,
-          // the toolbar, or use a custom showdown converter
-          value={instructions}
-          renderHTML={(text) => converter.makeHtml(text)}
-          onChange={handleEditorChange}
-          config={{
-            view: {
-              menu: true,
-              md: true,
-              html: true,  // ensures the preview panel is visible
-            },
-          }}
-        />
-      </div>
+        <div className="mb-4">
+          <label className="block font-semibold mb-1">Description</label>
+          <textarea
+            className="border border-gray-300 dark:border-gray-700 rounded w-full p-2"
+            rows="3"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
 
-      <div className="flex gap-4">
-        <button
-          onClick={() => handleSubmit(false)} // draft
-          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
-        >
-          Save as Draft
-        </button>
-        <button
-          onClick={() => handleSubmit(true)} // publish
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Publish
-        </button>
+        <div className="mb-4">
+          <label className="block font-semibold mb-1">Packages</label>
+          <div className="flex flex-wrap gap-4">
+            {availablePackages.map((pkg) => (
+              <label key={pkg} className="inline-flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  value={pkg}
+                  checked={packages.includes(pkg)}
+                  onChange={handleChangePackages}
+                />
+                <span className="capitalize">{pkg}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label className="block font-semibold mb-2">Instructions</label>
+          <MarkdownEditor
+            // For advanced usage, you can customize the config,
+            // the toolbar, or use a custom showdown converter
+            value={instructions}
+            renderHTML={(text) => converter.makeHtml(text)}
+            onChange={handleEditorChange}
+            config={{
+              view: {
+                menu: true,
+                md: true,
+                html: true,  // ensures the preview panel is visible
+              },
+            }}
+          />
+        </div>
+
+        <div className="flex gap-4">
+          <button
+            onClick={() => handleSubmit(false)} // draft
+            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+          >
+            Save as Draft
+          </button>
+          <button
+            onClick={() => handleSubmit(true)} // publish
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Publish
+          </button>
+        </div>
       </div>
     </div>
   );
