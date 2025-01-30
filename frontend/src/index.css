@@ -128,3 +128,19 @@ code {
 .tutorial-content pre {
 	padding: 1px;
 }
+
+
+.dark .md-editor {
+	background-color: #2d3748;
+	/* example dark bg */
+	color: #cbd5e0;
+}
+
+/* Also override toolbar colors, button backgrounds, etc. */
+.dark .md-editor .editor-toolbar {
+	background-color: #4a5568;
+}
+
+.dark .md-editor .button>span {
+	color: #edf2f7;
+}
