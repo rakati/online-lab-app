@@ -14,10 +14,11 @@ class LabSerializer(serializers.ModelSerializer):
             "instructions",
             "status",
             "packages",
+            "participants",
             "created_by",
             "created_at",
         )
-        read_only_fields = ("created_by", "created_at")
+        read_only_fields = ("created_by", "created_at", "participants", "slug")
 
 
 class StudentProgressSerializer(serializers.ModelSerializer):
