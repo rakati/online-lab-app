@@ -1,7 +1,7 @@
 // src/pages/LabInfoPage.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getLabById, deleteLab } from '../services/api';
+import { fetchLabById, deleteLab } from '../services/labApi';
 import { useAuth } from '../context/AuthContext';
 
 function LabInfoPage() {
@@ -17,7 +17,7 @@ function LabInfoPage() {
 
   const fetchLab = async () => {
     try {
-      const data = await getLabById(id);
+      const data = await fetchLabById(id);
       setLab(data);
     } catch (err) {
       console.error(err);
