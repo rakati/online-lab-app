@@ -1,32 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleTheme, setTheme } from './store/themeSlice';
 import Sidebar from './components/Sidebar';
 import LabPage from './pages/LabPage';
+import LabInfoPage from './pages/LabInfoPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
+import CreateLabPage from './pages/CreateLabPage';
+import LabsPage from './pages/LabsPage';
+import DashboardPage from './pages/DashboardPage';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const dispatch = useDispatch();
+  // Grab the theme from Redux
+  const theme = useSelector((state) => state.theme.theme);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  // On first load, make sure the <html> class is correct
+  useEffect(() => {
     document.documentElement.className = theme;
-    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  // This is the handler we'll pass down to the sidebar
+  const handleToggleTheme = () => {
+    dispatch(toggleTheme());
   };
 
   return (
     <AuthProvider>
-      <div className={theme === 'dark' ? 'dark' : ''}>
+      <div className={theme}>
           <div className="flex h-screen">
-            {/* Sidebar */}
-            <Sidebar theme={theme} toggleTheme={toggleTheme} />
+            <Sidebar theme={theme} toggleTheme={handleToggleTheme} />
 
             {/* Main Content */}
-            <div className="flex-1 overflow-y-auto bg-gray-900 text-gray-300">
+            <div className="flex-1 overflow-y-auto g-white dark:bg-gray-900 text-gray-300">
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route
@@ -34,6 +45,38 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <LabPage />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="/labs"
+                  element={
+                    <ProtectedRoute>
+                      <LabsPage />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="/labs/:id"
+                  element={
+                    <ProtectedRoute>
+                      <LabInfoPage />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardPage />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="/add-lab"
+                  element={
+                    <ProtectedRoute>
+                      <CreateLabPage />
                     </ProtectedRoute>
                   }
                 />

@@ -5,8 +5,20 @@ from .models import Lab, StudentProgress
 class LabSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lab
-        fields = "__all__"
-        read_only_fields = ("created_by", "created_at")
+        fields = (
+            "id",
+            "title",
+            "slug",
+            "image",
+            "description",
+            "instructions",
+            "status",
+            "packages",
+            "participants",
+            "created_by",
+            "created_at",
+        )
+        read_only_fields = ("created_by", "created_at", "participants", "slug")
 
 
 class StudentProgressSerializer(serializers.ModelSerializer):

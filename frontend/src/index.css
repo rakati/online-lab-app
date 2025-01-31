@@ -13,3 +13,134 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.border-theme {
+	@apply border border-gray-300 dark:border-gray-700 rounded;
+}
+
+.shadow-theme {
+	@apply shadow-md hover:shadow-lg;
+}
+
+/* Tiny Scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+	width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+	background: #4b5563;
+	/* Dark gray */
+	border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+	background: #374151;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+	background: #f3f4f6;
+	/* Light gray */
+}
+
+/* Dark Mode Scrollbar */
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+	background: #6b7280;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-track {
+	background: #1f2937;
+}
+
+/* Ensure Zoom Affects Only Content */
+.tutorial-content {
+	font-size: var(--tutorial-font-size, 100%);
+}
+
+:root {
+	--tutorial-font-size: 100%;
+}
+
+.tutorial-content {
+	font-size: var(--tutorial-font-size);
+	/* Dynamically adjust font size */
+	line-height: 1.5;
+}
+
+.tutorial-content p,
+.tutorial-content li {
+	font-size: inherit;
+	/* Ensure all text elements scale */
+}
+
+.tutorial-content h1,
+.tutorial-content h2,
+.tutorial-content h3 {
+	font-weight: bold;
+	border-bottom: 2px solid #ddd;
+	margin-top: 4%;
+	margin-bottom: 4%;
+}
+
+.tutorial-content pre {
+	overflow-x: auto;
+	padding: 1rem;
+	background-color: #1e293b;
+	/* Dark background for code */
+	border-radius: 4px;
+}
+
+.tutorial-content {
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+
+
+	code, pre {
+		white-space: pre-wrap;
+	}
+}
+
+.tutorial-content table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.tutorial-content th,
+.tutorial-content td {
+	border: 1px solid #ccc;
+	padding: 8px;
+}
+
+.tutorial-content a {
+	color: #1e40af;
+	/* or a different shade of blue */
+	text-decoration: underline;
+}
+
+.tutorial-content blockquote {
+	border-left: 4px solid #ccc;
+	padding-left: 1em;
+	margin: 1em 0;
+	color: #555;
+	/* optional background color or italics, etc. */
+	font-style: italic;
+}
+
+.tutorial-content pre {
+	padding: 1px;
+}
+
+
+.dark .md-editor {
+	background-color: #2d3748;
+	/* example dark bg */
+	color: #cbd5e0;
+}
+
+/* Also override toolbar colors, button backgrounds, etc. */
+.dark .md-editor .editor-toolbar {
+	background-color: #4a5568;
+}
+
+.dark .md-editor .button>span {
+	color: #edf2f7;
+}
