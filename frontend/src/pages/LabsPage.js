@@ -2,19 +2,22 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import LabCard from '../components/LabCard';
-import { useSelector } from 'react-redux'; // or your auth context
+import { useSelector } from 'react-redux';
+import { fetchLabs as fetchLabsApi } from '../services/labApi';
 
 const LabsPage = () => {
   const [search, setSearch] = useState('');
   const [labs, setLabs] = useState([]);
   const { user } = useAuth();// or context-based user
 
-  const fetchLabs = () => {
-    fetch('/api/labs/', { credentials: 'include' })
-      .then(res => res.json())
-      .then(data => setLabs(data))
-      .catch(err => console.error(err));
-  };
+  const fetchLabs = async () => {
+      try {
+        const res = await fetchLabsApi(); // Custom API call that fetches instructor labs
+        setLabs(res.results);
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
   useEffect(() => {
     fetchLabs();
