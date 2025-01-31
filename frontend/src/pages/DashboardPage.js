@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { deleteLab } from '../services/labApi';
+import { fetchLabs as fetchLabsApi } from '../services/labApi';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -18,8 +19,8 @@ function DashboardPage() {
 
   const fetchLabs = async () => {
     try {
-      const data = await fetchLabs(); // Custom API call that fetches instructor labs
-      setLabs(data);
+      const data = await fetchLabsApi(); // Custom API call that fetches instructor labs
+      setLabs(data.results || []);
     } catch (err) {
       console.error(err);
     }
@@ -59,20 +60,20 @@ function DashboardPage() {
           </tr>
         </thead>
         <tbody>
-          {labs.map((lab) => (
+          {labs?.map((lab) => (
             <tr key={lab.id} className="border-b border-gray-200 dark:border-gray-700">
               <td className="p-2">{lab.title}</td>
               <td className="p-2">{lab.status}</td>
               <td className="p-2">{lab.participants?.length || 0}</td>
               <td className="p-2 text-right space-x-2">
                 <button
-                  onClick={() => navigate(`/lab/${lab.id}`)}
+                  onClick={() => navigate(`/labs/${lab.id}`)}
                   className="bg-gray-500 text-white px-2 py-1 rounded"
                 >
                   View
                 </button>
                 <button
-                  onClick={() => navigate(`/lab/${lab.id}/edit`)}
+                  onClick={() => navigate(`/labs/${lab.id}/edit`)}
                   className="bg-blue-500 text-white px-2 py-1 rounded"
                 >
                   Edit
