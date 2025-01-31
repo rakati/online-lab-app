@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme, setTheme } from './store/themeSlice';
 import Sidebar from './components/Sidebar';
 import LabPage from './pages/LabPage';
+import LabInfoPage from './pages/LabInfoPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
@@ -52,6 +53,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <LabsPage />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="/labs/:id"
+                  element={
+                    <ProtectedRoute>
+                      <LabInfoPage />
                     </ProtectedRoute>
                   }
               />
