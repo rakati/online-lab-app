@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchLabById, deleteLab } from '../services/labApi';
-import { useAuth } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 
 function LabInfoPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [lab, setLab] = useState(null);
   const [error, setError] = useState('');
-  const { user } = useAuth();
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
     fetchLab();

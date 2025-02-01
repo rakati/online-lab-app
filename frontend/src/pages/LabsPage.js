@@ -1,6 +1,5 @@
 // src/pages/LabsPage.js
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
 import LabCard from '../components/LabCard';
 import { useSelector } from 'react-redux';
 import { fetchLabs as fetchLabsApi } from '../services/labApi';
@@ -8,10 +7,10 @@ import { fetchLabs as fetchLabsApi } from '../services/labApi';
 const LabsPage = () => {
   const [search, setSearch] = useState('');
   const [labs, setLabs] = useState([]);
-  const { user } = useAuth();// or context-based user
+  const { user } = useSelector((state) => state.user);
 
   const fetchLabs = async () => {
-      try {
+    try {
         const res = await fetchLabsApi(); // Custom API call that fetches instructor labs
         setLabs(res.results);
       } catch (err) {

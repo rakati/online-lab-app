@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaSync, FaUser, FaMoon, FaSun } from 'react-icons/fa';
 import { ImLab } from "react-icons/im";
-import { useAuth } from '../context/AuthContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { setLogout } from '../store/userSlice';
 
 const Sidebar = ({ theme, toggleTheme }) => {
-  const { isLoggedIn, logout } = useAuth();
+  const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((state) => state.user);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(setLogout());
+  };
 
   return (
     <aside className="h-full w-16 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col justify-between items-center py-4 border-r border-gray-300 dark:border-gray-700">
@@ -52,7 +58,7 @@ const Sidebar = ({ theme, toggleTheme }) => {
                     Profile
                   </Link>
                   <button
-                    onClick={logout}
+                    onClick={handleLogout}
                     className="block hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded w-full text-left"
                   >
                     Logout

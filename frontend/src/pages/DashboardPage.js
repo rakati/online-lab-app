@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { deleteLab } from '../services/labApi';
 import { fetchLabs as fetchLabsApi } from '../services/labApi';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 
 function DashboardPage() {
   const [labs, setLabs] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [labToDelete, setLabToDelete] = useState(null);
   const navigate = useNavigate();
-  const { user } = useAuth(); // or wherever your user info comes from
-
+  const { user } = useSelector((state) => state.user);
   useEffect(() => {
     if (user) {
       fetchLabs();
