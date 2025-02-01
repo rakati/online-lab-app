@@ -16,7 +16,9 @@ const Sidebar = ({ theme, toggleTheme }) => {
 
   useEffect(() => {
     function handleClickOutside(e) {
-      setUserMenuOpen(false);
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setUserMenuOpen(false);
+      }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -59,7 +61,7 @@ const Sidebar = ({ theme, toggleTheme }) => {
 
           {/* User Dropdown Menu */}
           {userMenuOpen && (
-            <div className="absolute bottom-16 left-16 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded shadow-lg w-48 p-2">
+            <div ref={menuRef} className="absolute bottom-16 left-16 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded shadow-lg w-48 p-2">
               {isLoggedIn ? (
                 <>
                   <Link to="/profile" className="block hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded">
