@@ -14,7 +14,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setLogin(state, action) {
-      console.log("userSlice: log in");
       const { accessToken, refreshToken } = action.payload;
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
@@ -32,7 +31,6 @@ const userSlice = createSlice({
       api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     },
     setLogout(state) {
-      console.log("userSlice: log out");
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
@@ -41,7 +39,6 @@ const userSlice = createSlice({
       localStorage.removeItem('refresh');
     },
     loadUserFromStorage(state) {
-      console.log("loading user from storage");
       const storedAccess = localStorage.getItem('access');
       const storedRefresh = localStorage.getItem('refresh');
       if (storedAccess && storedRefresh) {
@@ -49,7 +46,6 @@ const userSlice = createSlice({
         state.refreshToken = storedRefresh;
         state.isLoggedIn = true;
         // decode
-        console.log("decode token to get username at loaduser func");
         const decoded = jwtDecode(storedAccess);
         state.user = {
           username: decoded.username,
