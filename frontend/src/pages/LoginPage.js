@@ -1,27 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { login } from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLogin } from '../store/userSlice';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { login: authenticateUser } = useAuth();
 
+  const location = useLocation();
   // Determine where to redirect after login
   const from = location.state?.from?.pathname || '/';
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      console.log(`authenticating ${username} with pass: ${password}`);
-      const data = await login(username, password);
-      localStorage.setItem('access', data.access);
-      localStorage.setItem('refresh', data.refresh);
-      authenticateUser(); // Update global login state
+      const { access, refresh } = await login(username, password);
+      dispatch(setLogin({
+        accessToken: access,
+        refreshToken: refresh,
+      }));
       setError('');
       navigate(from, { replace: true }); // Redirect to the requested page or fallback to "/"
     } catch (err) {

@@ -1,22 +1,43 @@
 import axios from 'axios';
+import { store } from '../store'; // or wherever your store is
+import { setLogout } from '../store/userSlice';
 import { convertKeysToSnakeCase, convertKeysToCamelCase } from '../utils/caseConverter';
 
 const api = axios.create({
   baseURL: 'http://localhost:8000/api',
 });
 
-// Add Authorization header to all requests
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    const { status } = error.response || {};
+
+    // 1) If 401 and not yet retried
+    if (
+      status === 401 &&
+      !originalRequest._retry &&
+      // 2) skip if it's already the refresh or login request
+      !originalRequest.url.includes('/token/') &&
+      // (and maybe skip '/users/register/' if you want)
+      !originalRequest.url.includes('/register')
+    ) {
       originalRequest._retry = true;
-      await refreshToken(); // Refresh the token
-      const token = localStorage.getItem('access');
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      return api(originalRequest); // Retry the original request
+      try {
+        // attempt refresh
+        await refreshToken();
+        // set the header from localStorage
+        const access = localStorage.getItem('access');
+        api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+        // retry the original
+        return api(originalRequest);
+      } catch (err) {
+        // If refresh fails => log out
+        store.dispatch(setLogout());
+        return Promise.reject(err);
+      }
     }
+
     return Promise.reject(error);
   }
 );
@@ -66,8 +87,12 @@ export const register = async (formData) => {
 // Handle refresh token
 export const refreshToken = async () => {
   const refresh = localStorage.getItem('refresh');
+  if (!refresh) {
+    throw new Error('No refresh token available');
+  }
   const response = await api.post('/token/refresh/', { refresh });
-  localStorage.setItem('access', response.data.access); // Update the access token
+  localStorage.setItem('access', response.data.access);
+  return response.data.access;
 };
 
 export default api;
