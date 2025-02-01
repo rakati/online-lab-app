@@ -13,6 +13,7 @@ import ProfilePage from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
 import CreateLabPage from './pages/CreateLabPage';
 import LabsPage from './pages/LabsPage';
+import LabInstructionPage from './pages/LabInstructionsPage';
 import DashboardPage from './pages/DashboardPage';
 import { ProtectedRoute, PublicOnlyRoute } from './components/ProtectedRoute';
 
@@ -54,7 +55,8 @@ function App() {
               <Route path="/labs"           element={<ProtectedRoute>  <LabsPage />         </ProtectedRoute>}/>
               <Route path="/labs/:id"       element={<ProtectedRoute>  <LabInfoPage />      </ProtectedRoute>}/>
               <Route path="/labs/:id/edit"  element={<ProtectedRoute>  <LabInfoPage />      </ProtectedRoute>}/>
-              <Route path="/labs/:id/start"  element={<ProtectedRoute>  <LabPage />          </ProtectedRoute>}/>
+              <Route path="/labs/:id/start"  element={<ProtectedRoute>  <LabInfoPage />      </ProtectedRoute>}/>
+              <Route path="/labs/:id/view"  element={<ProtectedRoute> <LabInstructionPage/></ProtectedRoute>}/>
               <Route path="/labs/new"        element={<ProtectedRoute>  <CreateLabPage />    </ProtectedRoute>}/>
               {/* temp */}
               <Route path="/lab"            element={<ProtectedRoute>  <LabPage />          </ProtectedRoute>}/>
