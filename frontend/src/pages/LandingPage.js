@@ -44,7 +44,7 @@ const LandingPage = () => {
         {labs.map((lab, index) => (
           <div
             key={index}
-            className="bbg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-4 rounded border border-gray-300 dark:border-gray-700 shadow-md hover:shadow-lg cursor-pointer"
+            className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-4 rounded border border-gray-300 dark:border-gray-700 shadow-md hover:shadow-lg cursor-pointer"
           >
             <img
               src={lab.image}
