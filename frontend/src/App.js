@@ -12,6 +12,7 @@ import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
 import CreateLabPage from './pages/CreateLabPage';
+import EditLabPage from './pages/EditLabPage';
 import LabsPage from './pages/LabsPage';
 import LabInstructionPage from './pages/LabInstructionsPage';
 import DashboardPage from './pages/DashboardPage';
@@ -43,23 +44,21 @@ function App() {
             <Routes>
 
               {/* Public pages */}
-              <Route path="/"               element={                  <LandingPage/>                         }/>
-              <Route path="/login"          element={<PublicOnlyRoute> <LoginPage />        </PublicOnlyRoute>}/>
+              <Route path="/"               element={                   <LandingPage/>                        }/>
+              <Route path="/login"          element={<PublicOnlyRoute>  <LoginPage />       </PublicOnlyRoute>}/>
               <Route path="/register"       element={                   <RegisterPage />                      }/>
 
               {/* User info and settings */}
-              <Route path="/profile"        element={<ProtectedRoute>  <ProfilePage />      </ProtectedRoute>}/>
-              <Route path="/dashboard"      element={<ProtectedRoute>  <DashboardPage />    </ProtectedRoute>}/>
+              <Route path="/profile"        element={<ProtectedRoute>   <ProfilePage />      </ProtectedRoute>}/>
+              <Route path="/dashboard"      element={<ProtectedRoute>   <DashboardPage />    </ProtectedRoute>}/>
 
               {/* Lab routes */}
-              <Route path="/labs"           element={<ProtectedRoute>  <LabsPage />         </ProtectedRoute>}/>
-              <Route path="/labs/:id"       element={<ProtectedRoute>  <LabInfoPage />      </ProtectedRoute>}/>
-              <Route path="/labs/:id/edit"  element={<ProtectedRoute>  <LabInfoPage />      </ProtectedRoute>}/>
-              <Route path="/labs/:id/start"  element={<ProtectedRoute>  <LabInfoPage />      </ProtectedRoute>}/>
-              <Route path="/labs/:id/view"  element={<ProtectedRoute> <LabInstructionPage/></ProtectedRoute>}/>
-              <Route path="/labs/new"        element={<ProtectedRoute>  <CreateLabPage />    </ProtectedRoute>}/>
-              {/* temp */}
-              <Route path="/lab"            element={<ProtectedRoute>  <LabPage />          </ProtectedRoute>}/>
+              <Route path="/labs"           element={                   <LabsPage />                          }/>
+              <Route path="/labs/:id"       element={                   <LabInfoPage />                       }/>
+              <Route path="/labs/:id/edit"  element={<ProtectedRoute>   <EditLabPage />      </ProtectedRoute>}/>
+              <Route path="/labs/:id/start" element={<ProtectedRoute>   <LabPage />      </ProtectedRoute>}/>
+              <Route path="/labs/:id/view"  element={<ProtectedRoute>   <LabInstructionPage/></ProtectedRoute>}/>
+              <Route path="/labs/new"       element={<ProtectedRoute>   <CreateLabPage />    </ProtectedRoute>}/>
 
             </Routes>
           </div>
