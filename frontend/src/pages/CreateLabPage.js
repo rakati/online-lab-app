@@ -4,9 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import MdEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import Showdown from 'showdown';
-import { createLab } from '../services/labApi';
-import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
+import { createLab, updateLab } from '../services/labApi';
 
 const converter = new Showdown.Converter({
   tables: true,
@@ -15,20 +13,23 @@ const converter = new Showdown.Converter({
 
 const difficultyLevels = ['Beginner', 'Intermediate', 'Advanced'];
 
-function CreateLabPage() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [packages, setPackages] = useState([]);
-  const [instructions, setInstructions] = useState('');
-  const [imageFile, setImageFile] = useState(null);
+function CreateLabPage({ initialData = null, isEdit = false }) {
+  const [title, setTitle] = useState(initialData?.title, '');
+  const [description, setDescription] = useState(initialData?.description, '');
+  const [packages, setPackages] = useState(initialData?.packages, []);
+  const [instructions, setInstructions] = useState(initialData?.instructions, '');
+  const [imageFile, setImageFile] = useState(initialData?.imageFile, null);
+  const [time, setTime] = useState(initialData?.time, null);
+  const [language, setLanguage] = useState(initialData?.language, null);
+  const [skills, setSkills] = useState(initialData?.language, null);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   // New fields
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState(''); // for comma parsing or a simple approach
-  const [difficulty, setDifficulty] = useState('Beginner');
-  const [status, setStatus] = useState('DRAFT');
+  const [difficulty, setDifficulty] = useState(initialData?.difficulty, 'Beginner');
+  const [status, setStatus] = useState(initialData?.status, 'DRAFT');
 
   const availablePackages = ['python', 'nodejs', 'java', 'tensorflow', 'pytorch'];
 
@@ -38,7 +39,7 @@ function CreateLabPage() {
 
   useEffect(() => {
     const savedData = localStorage.getItem('labDraftData');
-    if (savedData) {
+    if (!initialData && savedData) {
       const parsed = JSON.parse(savedData);
       setTitle(parsed.title || '');
       setDescription(parsed.description || '');
@@ -106,7 +107,11 @@ function CreateLabPage() {
     }
 
     try {
-      await createLab(formData);
+      if (isEdit) {
+        await updateLab(initialData.id, formData);
+      } else {
+        await createLab(formData);
+      }
       localStorage.removeItem('labDraftData');
       navigate('/labs');
     } catch (err) {
