@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.db.models import JSONField
 from django.utils.text import slugify
+import uuid
 
 
 class Lab(models.Model):
@@ -11,13 +12,37 @@ class Lab(models.Model):
         ("DRAFT", "Draft"),
         ("PUBLISHED", "Published"),
     )
-
+    DIFFICULTY_CHOICES = (
+        ("beginner", "Beginner"),
+        ("intermediate", "Intermediate"),
+        ("advanced", "Advanced"),
+    )
+    LANGUAGE_CHOICES = (
+        ("eng", "English"),
+        ("fr", "French"),
+        ("ar", "Arabic"),
+    )
+    # general fields
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     image = models.ImageField(upload_to="labs/", blank=True, null=True)
 
+    # informative fields
     description = models.TextField(blank=True, default="")
     instructions = models.TextField(blank=True, default="")
+    time = models.PositiveIntegerField(
+        blank=True, null=True, help_text="Time in minutes for the lab."
+    )
+    skills = JSONField(
+        default=list, blank=True, help_text="List of skills relevant to the lab."
+    )
+    tags = JSONField(default=list, blank=True)
+    difficulty = models.CharField(
+        max_length=20, choices=DIFFICULTY_CHOICES, default="beginner"
+    )
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES, default="eng")
+
+    # extra handy fields for instructor
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
