@@ -1,4 +1,3 @@
-// src/pages/CreateLabPage.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MdEditor from 'react-markdown-editor-lite';
@@ -12,30 +11,27 @@ const converter = new Showdown.Converter({
 });
 
 const difficultyLevels = ['Beginner', 'Intermediate', 'Advanced'];
+const availablePackages = ['python', 'nodejs', 'java', 'tensorflow', 'pytorch'];
+const languageOptions = ['eng', 'fr', 'ar'];
 
 function CreateLabPage({ initialData = null, isEdit = false }) {
-  const [title, setTitle] = useState(initialData?.title, '');
-  const [description, setDescription] = useState(initialData?.description, '');
-  const [packages, setPackages] = useState(initialData?.packages, []);
-  const [instructions, setInstructions] = useState(initialData?.instructions, '');
-  const [imageFile, setImageFile] = useState(initialData?.imageFile, null);
-  const [time, setTime] = useState(initialData?.time, null);
-  const [language, setLanguage] = useState(initialData?.language, null);
-  const [skills, setSkills] = useState(initialData?.language, null);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // New fields
-  const [tags, setTags] = useState([]);
-  const [tagInput, setTagInput] = useState(''); // for comma parsing or a simple approach
-  const [difficulty, setDifficulty] = useState(initialData?.difficulty, 'Beginner');
-  const [status, setStatus] = useState(initialData?.status, 'DRAFT');
-
-  const availablePackages = ['python', 'nodejs', 'java', 'tensorflow', 'pytorch'];
-
-  // If using a global theme from Redux or context, you can read it here
-  // const { theme } = useAuth() or from useSelector(...)
-  // Then apply to the editor. For instance, you might have a dark CSS override.
+  // State initialization fixed
+  const [title, setTitle] = useState(initialData?.title || '');
+  const [description, setDescription] = useState(initialData?.description || '');
+  const [packages, setPackages] = useState(initialData?.packages || []);
+  const [instructions, setInstructions] = useState(initialData?.instructions || '');
+  const [imageFile, setImageFile] = useState(null);
+  const [time, setTime] = useState(initialData?.time || '');
+  const [language, setLanguage] = useState(initialData?.language || 'eng');
+  const [skills, setSkills] = useState(initialData?.skills || []);
+  const [tags, setTags] = useState(initialData?.tags || []);
+  const [difficulty, setDifficulty] = useState(initialData?.difficulty || 'Beginner');
+  const [status, setStatus] = useState(initialData?.status || 'DRAFT');
+  const [error, setError] = useState('');
+  const [tagInput, setTagInput] = useState('');
+  const [skillInput, setSkillInput] = useState('');
 
   useEffect(() => {
     const savedData = localStorage.getItem('labDraftData');
@@ -43,7 +39,10 @@ function CreateLabPage({ initialData = null, isEdit = false }) {
       const parsed = JSON.parse(savedData);
       setTitle(parsed.title || '');
       setDescription(parsed.description || '');
+      setTime(parsed.time || '');
+      setLanguage(parsed.language || '');
       setInstructions(parsed.instructions || '');
+      setSkills(parsed.skills || []);
       setPackages(parsed.packages || []);
       setTags(parsed.tags || []);
       setDifficulty(parsed.difficulty || 'Beginner');
@@ -56,13 +55,15 @@ function CreateLabPage({ initialData = null, isEdit = false }) {
       description,
       instructions,
       packages,
+      skills,
+      time,
+      language,
       tags,
       difficulty,
     };
     localStorage.setItem('labDraftData', JSON.stringify(draftData));
   }, [title, description, instructions, packages, tags, difficulty]);
 
-  // handle packages
   const handleChangePackages = (e) => {
     const { value, checked } = e.target;
     setPackages((prev) =>
@@ -70,12 +71,10 @@ function CreateLabPage({ initialData = null, isEdit = false }) {
     );
   };
 
-  // handle markdown
   const handleEditorChange = ({ text }) => {
     setInstructions(text);
   };
 
-  // handle tags
   const handleAddTag = () => {
     if (!tagInput.trim()) return;
     const newTag = tagInput.trim();
@@ -84,11 +83,20 @@ function CreateLabPage({ initialData = null, isEdit = false }) {
     }
     setTagInput('');
   };
+
   const handleRemoveTag = (tagToRemove) => {
     setTags((prev) => prev.filter((t) => t !== tagToRemove));
   };
 
-  // handle submit
+  const handleAddSkill = () => {
+    if (!skillInput.trim()) return;
+    const newSkill = skillInput.trim();
+    if (!skills.includes(newSkill)) {
+      setSkills((prev) => [...prev, newSkill]);
+    }
+    setSkillInput('');
+  };
+
   const handleSubmit = async (publish = false) => {
     const finalStatus = publish ? 'PUBLISHED' : 'DRAFT';
     setStatus(finalStatus);
@@ -101,6 +109,9 @@ function CreateLabPage({ initialData = null, isEdit = false }) {
     formData.append('packages', JSON.stringify(packages));
     formData.append('tags', JSON.stringify(tags));
     formData.append('difficulty', difficulty);
+    formData.append('time', time);
+    formData.append('language', language);
+    formData.append('skills', JSON.stringify(skills));
 
     if (imageFile) {
       formData.append('image', imageFile);
@@ -121,164 +132,49 @@ function CreateLabPage({ initialData = null, isEdit = false }) {
   };
 
   return (
-    <div className="container mx-auto max-w-6xl px-4">
-      <div className="p-4 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-100 min-h-screen">
-        <h1 className="text-2xl text-black dark:text-white font-bold mb-4">
-          Create New Lab
-        </h1>
+    <div className="container mx-auto max-w-5xl px-6 py-12">
+      <div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 rounded-lg shadow-md p-8 space-y-6">
+        <h1 className="text-3xl font-bold">{isEdit ? 'Edit Lab' : 'Create New Lab'}</h1>
 
-        {error && (
-          <div className="bg-red-200 text-red-800 px-4 py-2 rounded mb-4">
-            {error}
-          </div>
-        )}
+        {error && <div className="bg-red-200 text-red-800 px-4 py-2 rounded">{error}</div>}
 
         {/* Title */}
-        <div className="mb-4">
-          <label className="block text-gray-900 dark:text-gray-200 mb-1">
-            Title <span className="text-red-500">*</span>
-          </label>
-          <input
-            className="border border-gray-300 dark:border-gray-700 rounded w-full p-2"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
+        <input className="border dark:bg-gray-800 rounded w-full p-2" placeholder="Lab Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
 
-        {/* Image */}
-        <div className="mb-4">
-          <label className="block text-gray-900 dark:text-gray-200 mb-1">
-            Lab Image (optional)
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImageFile(e.target.files[0])}
-          />
-        </div>
+        {/* Language Selection */}
+        <select className="border dark:bg-gray-800 rounded w-full p-2" value={language} onChange={(e) => setLanguage(e.target.value)}>
+          {languageOptions.map((lang) => (
+            <option key={lang} value={lang}>
+              {lang.toUpperCase()}
+            </option>
+          ))}
+        </select>
 
-        {/* Description */}
-        <div className="mb-4">
-          <label className="block text-gray-900 dark:text-gray-200 mb-1">
-            Description
-          </label>
-          <textarea
-            className="border border-gray-300 dark:border-gray-700 rounded w-full p-2"
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
+        {/* Time Required */}
+        <input className="border dark:bg-gray-800 rounded w-full p-2" type="number" placeholder="Estimated Time (in minutes)" value={time} onChange={(e) => setTime(e.target.value)} />
 
-        {/* Packages */}
-        <div className="mb-4">
-          <label className="block text-gray-900 dark:text-gray-200 mb-1">
-            Packages
-          </label>
-          <div className="flex gap-4 flex-wrap text-gray-700 dark:text-gray-200">
-            {availablePackages.map((pkg) => (
-              <label key={pkg} className="inline-flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  value={pkg}
-                  checked={packages.includes(pkg)}
-                  onChange={handleChangePackages}
-                />
-                <span className="capitalize">{pkg}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* Tags */}
-        <div className="mb-4">
-          <label className="block text-gray-900 dark:text-gray-200 mb-1">
-            Tags
-          </label>
-          <div className="flex gap-2 items-center">
-            <input
-              className="border border-gray-300 dark:border-gray-700 rounded p-2"
-              type="text"
-              placeholder="Add a tag"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-            />
-            <button
-              type="button"
-              onClick={handleAddTag}
-              className="bg-gray-600 text-white px-3 py-1 rounded"
-            >
-              Add
-            </button>
-          </div>
-          <div className="flex gap-2 mt-2">
-            {tags.map((tag) => (
-              <span
-                key={tag}
-                className="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center gap-2"
-              >
-                {tag}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveTag(tag)}
-                  className="text-red-600"
-                >
-                  x
-                </button>
-              </span>
-            ))}
-          </div>
+        {/* Skills */}
+        <div className="flex gap-2">
+          <input className="border dark:bg-gray-800 rounded p-2" type="text" placeholder="Add a skill" value={skillInput} onChange={(e) => setSkillInput(e.target.value)} />
+          <button onClick={handleAddSkill} className="bg-gray-600 text-white px-3 py-1 rounded">Add</button>
         </div>
 
         {/* Difficulty */}
-        <div className="mb-4">
-          <label className="block text-gray-900 dark:text-gray-200 mb-1">
-            Difficulty
-          </label>
-          <select
-            className="border border-gray-300 dark:border-gray-700 rounded p-2"
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-          >
-            {difficultyLevels.map((level) => (
-              <option key={level} value={level}>
-                {level}
-              </option>
-            ))}
-          </select>
-        </div>
+        <select className="border dark:bg-gray-800 rounded w-full p-2" value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
+          {difficultyLevels.map((level) => (
+            <option key={level} value={level}>
+              {level}
+            </option>
+          ))}
+        </select>
 
         {/* Instructions */}
-        <div className="mb-4">
-          <label className="block text-gray-900 dark:text-gray-200 mb-1">
-            Instructions (Markdown)
-          </label>
-          <MdEditor
-            value={instructions}
-            renderHTML={(text) => converter.makeHtml(text)}
-            onChange={handleEditorChange}
-            style={{ height: '300px' }}
-            config={{
-              view: { menu: true, md: true, html: true },
-            }}
-          />
-        </div>
+        <MdEditor value={instructions} renderHTML={(text) => converter.makeHtml(text)} onChange={handleEditorChange} style={{ height: '300px' }} />
 
         {/* Buttons */}
-        <div className="flex gap-2">
-          <button
-            onClick={() => handleSubmit(false)}
-            className="bg-gray-600 text-white px-4 py-2 rounded"
-          >
-            Save as Draft
-          </button>
-          <button
-            onClick={() => handleSubmit(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            Publish
-          </button>
+        <div className="flex gap-4">
+          <button onClick={() => handleSubmit(false)} className="bg-gray-600 text-white px-4 py-2 rounded">Save as Draft</button>
+          <button onClick={() => handleSubmit(true)} className="bg-blue-600 text-white px-4 py-2 rounded">Publish</button>
         </div>
       </div>
     </div>

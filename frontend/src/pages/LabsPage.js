@@ -34,7 +34,7 @@ const LabsPage = () => {
           {/* If user is instructor, show add-lab button */}
           {user?.is_instructor && (
             <a
-              href="/add-lab"
+              href="/labs/new"
               className="bg-blue-600 text-white px-4 py-2 rounded"
             >
               + Add Lab

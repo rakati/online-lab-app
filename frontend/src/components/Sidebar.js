@@ -46,7 +46,7 @@ const Sidebar = ({ theme, toggleTheme }) => {
           {theme === 'dark' ? <FaSun size={24} /> : <FaMoon size={24} />}
         </button>
 
-        <Link to="/lab" className="hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded border border-transparent focus:border-blue-500" title="Go to Lab">
+        <Link to="/labs" className="hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded border border-transparent focus:border-blue-500" title="Go to Lab">
           <ImLab size={24} />
         </Link>
 

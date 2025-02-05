@@ -43,7 +43,8 @@ function LabInfoPage() {
     }
   };
 
-  const isSubscribed = true; // temp solution until handle that in the backend
+  console.log("lab.data", lab);
+  const isSubscribed = lab?.isParticipant;
 
   if (!lab) {
     return <div className="p-4 dark:bg-gray-900 dark:text-gray-100">Loading...</div>;
@@ -94,7 +95,7 @@ function LabInfoPage() {
           ) : (
             <>
               <button
-                onClick={() => navigate(`/lab/${lab.id}/start`)}
+                onClick={() => navigate(`/labs/${lab.id}/start`)}
                 className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg shadow-md transition-all"
               >
                 Start Lab

@@ -1,10 +1,10 @@
 import React from 'react';
 
-const TheiaPanel = () => {
+const TheiaPanel = (theiaUrl) => {
   return (
     <div className="bg-gray-700 p-4 flex-grow">
       <iframe
-        src="http://localhost:4000"
+        src={theiaUrl}
         className="w-full h-full border-0"
         title="Theia IDE"
       ></iframe>

@@ -18,14 +18,20 @@ export const fetchLabById = async (labId) => {
 };
 
 /**
+ * Start a lab with an ID.
+ */
+export const startLab = async (labId) => {
+  const response = await api.post(`/labs/${labId}/start/`);
+  return convertKeysToCamelCase(response.data);
+};
+
+/**
  * Create a new lab.
  * If passing FormData (for image upload), we skip snake-case conversion.
  */
 export const createLab = async (data) => {
   let payload = data;
 
-  // If it's a regular JS object, convert to snake case;
-  // if it's FormData, we assume the keys are already correct.
   if (!(data instanceof FormData)) {
     const convertedData = convertKeysToSnakeCase(data);
     payload = new FormData();

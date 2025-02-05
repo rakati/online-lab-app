@@ -2,10 +2,6 @@ import React from 'react';
 import { Link } from "react-router";
 
 const LabCard = ({ lab, user, onRefresh }) => {
-  // If your user object has isInstructor or similar
-  const isOwner = user && lab.created_by === user.id;
-  const isPublished = lab.status === 'PUBLISHED';
-
   const handleSubscribe = () => {
     fetch(`/api/labs/${lab.id}/subscribe/`, { method: 'POST', credentials: 'include' })
       .then(res => res.json())
@@ -20,39 +16,7 @@ const LabCard = ({ lab, user, onRefresh }) => {
       .catch(err => console.error(err));
   };
 
-  // Edit / Delete would be similar calls or navigation
   return (
-    //   <div className="flex gap-2">
-    //     {isOwner && (
-    //       <>
-    //         <button className="bg-blue-500 text-white px-2 py-1 rounded">
-    //           Edit
-    //         </button>
-    //         <button className="bg-red-500 text-white px-2 py-1 rounded">
-    //           Delete
-    //         </button>
-    //       </>
-    //     )}
-
-    //     {!isOwner && isPublished && (
-    //       <>
-    //         <button
-    //           onClick={handleSubscribe}
-    //           className="bg-green-500 text-white px-2 py-1 rounded"
-    //         >
-    //           Subscribe
-    //         </button>
-    //         <button
-    //           onClick={handleUnsubscribe}
-    //           className="bg-yellow-500 text-white px-2 py-1 rounded"
-    //         >
-    //           Unsubscribe
-    //         </button>
-    //       </>
-    //     )}
-    //     </div>
-    //     </div>
-    // </div>
 
     <div
       className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-4 rounded border border-gray-300 dark:border-gray-700 shadow-md hover:shadow-lg cursor-pointer"
