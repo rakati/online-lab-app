@@ -60,13 +60,16 @@ class LabViewSet(ModelViewSet):
         if not lab.participants.filter(id=user.id).exists():
             lab.participants.add(user)
 
-        # Construct container_name, port, workspace_dir
+        # Construct container_name, port, workspace_dir to avoid name collision
         container_name = f"theia_{user.id}_{lab.id}"
-        port = 4000  # or dynamic
+        # TODO make the port dynamic to support multiple users on the same time
+        port = 4000
         workspace_dir = f"user_{user.id}_lab_{lab.id}"
 
-        # packages = lab.packages  # might be a list from the DB
+        # TODO install package defined in lab.packages
         container = run_theia_container(container_name, port, workspace_dir)
+
+        # TODO store container info in db to track activities
         return Response(
             {
                 "status": "running",
