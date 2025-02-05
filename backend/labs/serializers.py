@@ -7,6 +7,7 @@ class LabSerializer(serializers.ModelSerializer):
         source="created_by.username", read_only=True
     )
     is_participant = serializers.SerializerMethodField()
+    participant_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Lab
@@ -19,7 +20,7 @@ class LabSerializer(serializers.ModelSerializer):
             "instructions",
             "status",
             "packages",
-            "participants",
+            "participant_count",
             "time",
             "skills",
             "difficulty",
@@ -38,9 +39,13 @@ class LabSerializer(serializers.ModelSerializer):
             return obj.participants.filter(id=request.user.id).exists()
         return False
 
+    def get_participant_count(self, obj):
+        return obj.participants.count()
+
 
 class LabListSerializer(serializers.ModelSerializer):
     description_snippet = serializers.SerializerMethodField()
+    participant_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Lab
@@ -49,8 +54,10 @@ class LabListSerializer(serializers.ModelSerializer):
             "title",
             "image",
             "description_snippet",
+            "participant_count",
             "time",
             "skills",
+            "status",
             "difficulty",
             "language",
             "tags",
@@ -60,6 +67,9 @@ class LabListSerializer(serializers.ModelSerializer):
         if len(obj.description) > 100:
             return obj.description[:100] + "..."
         return obj.description
+
+    def get_participant_count(self, obj):
+        return obj.participants.count()
 
 
 class StudentProgressSerializer(serializers.ModelSerializer):

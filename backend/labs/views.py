@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .theia_utils import run_theia_container
 from django.db.models import Q
 from online_lab_app.users.permissions import IsInstructor, IsStudent
@@ -12,10 +12,19 @@ from .serializers import LabSerializer, StudentProgressSerializer, LabListSerial
 class LabViewSet(ModelViewSet):
     queryset = Lab.objects.all()
     serializer_class = LabSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+
+    def get_permissions(self):
+        """
+        Only require auth for create/update/subscribe, but not for GET.
+        """
+        if self.action in ["list", "retrieve"]:
+            return [AllowAny()]
+        return [IsAuthenticated()]
 
     def get_serializer_class(self):
         if self.action == "list":
+            self.permission_classes = []
             return LabListSerializer
         return LabSerializer
 
@@ -23,16 +32,9 @@ class LabViewSet(ModelViewSet):
         serializer.save(created_by=self.request.user)
 
     def get_queryset(self):
-        user = self.request.user
-
-        if user.role == "instructor" or "admin":
-            return Lab.objects.filter(
-                Q(created_by=user) | Q(status="PUBLISHED")
-            ).distinct()
-        else:
-            return Lab.objects.filter(
-                Q(status="PUBLISHED") | Q(participants=user)
-            ).distinct()
+        # user = self.request.user
+        # Q(participants=user
+        return Lab.objects.filter(Q(status="PUBLISHED")).distinct()
 
     @action(detail=True, methods=["post"], url_path="subscribe")
     def subscribe(self, request, pk=None):
@@ -49,7 +51,7 @@ class LabViewSet(ModelViewSet):
         lab.participants.remove(user)
         return Response({"status": "unsubscribed"})
 
-    @action(detail=True, methods=["post"], url_path="start-lab")
+    @action(detail=True, methods=["post"], url_path="start")
     def start_lab(self, request, pk=None):
         """
         custom endpoint triggers the container for Theia.
@@ -63,7 +65,7 @@ class LabViewSet(ModelViewSet):
         # Construct container_name, port, workspace_dir to avoid name collision
         container_name = f"theia_{user.id}_{lab.id}"
         # TODO make the port dynamic to support multiple users on the same time
-        port = 4000
+        port = 4002
         workspace_dir = f"user_{user.id}_lab_{lab.id}"
 
         # TODO install package defined in lab.packages
@@ -73,7 +75,7 @@ class LabViewSet(ModelViewSet):
         return Response(
             {
                 "status": "running",
-                "containerName": container_name,
+                "container_name": container_name,
                 "port": port,
                 "url": f"http://{request.get_host()}:{port}",
             }
