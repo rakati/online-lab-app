@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { store } from './store';
+import { loadUserFromStorage } from './store/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme, setTheme } from './store/themeSlice';
 import Sidebar from './components/Sidebar';
@@ -10,12 +12,14 @@ import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
 import CreateLabPage from './pages/CreateLabPage';
+import EditLabPage from './pages/EditLabPage';
 import LabsPage from './pages/LabsPage';
+import LabInstructionPage from './pages/LabInstructionsPage';
 import DashboardPage from './pages/DashboardPage';
-import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
+import { ProtectedRoute, PublicOnlyRoute } from './components/ProtectedRoute';
 
 function App() {
+  store.dispatch(loadUserFromStorage());
   const dispatch = useDispatch();
   // Grab the theme from Redux
   const theme = useSelector((state) => state.theme.theme);
@@ -31,69 +35,35 @@ function App() {
   };
 
   return (
-    <AuthProvider>
-      <div className={theme}>
-          <div className="flex h-screen">
-            <Sidebar theme={theme} toggleTheme={handleToggleTheme} />
+    <div className={theme}>
+        <div className="flex h-screen">
+          <Sidebar theme={theme} toggleTheme={handleToggleTheme} />
 
-            {/* Main Content */}
-            <div className="flex-1 overflow-y-auto g-white dark:bg-gray-900 text-gray-300">
-              <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route
-                  path="/lab"
-                  element={
-                    <ProtectedRoute>
-                      <LabPage />
-                    </ProtectedRoute>
-                  }
-              />
-              <Route
-                  path="/labs"
-                  element={
-                    <ProtectedRoute>
-                      <LabsPage />
-                    </ProtectedRoute>
-                  }
-              />
-              <Route
-                  path="/labs/:id"
-                  element={
-                    <ProtectedRoute>
-                      <LabInfoPage />
-                    </ProtectedRoute>
-                  }
-              />
-              <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <DashboardPage />
-                    </ProtectedRoute>
-                  }
-              />
-              <Route
-                  path="/add-lab"
-                  element={
-                    <ProtectedRoute>
-                      <CreateLabPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <ProfilePage />
-                    </ProtectedRoute>}
-                />
-              </Routes>
-            </div>
+          {/* Main Content */}
+          <div className="flex-1 overflow-y-auto g-white dark:bg-gray-900 text-gray-300">
+            <Routes>
+
+              {/* Public pages */}
+              <Route path="/"               element={                   <LandingPage/>                        }/>
+              <Route path="/login"          element={<PublicOnlyRoute>  <LoginPage />       </PublicOnlyRoute>}/>
+              <Route path="/register"       element={                   <RegisterPage />                      }/>
+
+              {/* User info and settings */}
+              <Route path="/profile"        element={<ProtectedRoute>   <ProfilePage />      </ProtectedRoute>}/>
+              <Route path="/dashboard"      element={<ProtectedRoute>   <DashboardPage />    </ProtectedRoute>}/>
+
+              {/* Lab routes */}
+              <Route path="/labs"           element={                   <LabsPage />                          }/>
+              <Route path="/labs/:id"       element={                   <LabInfoPage />                       }/>
+              <Route path="/labs/:id/edit"  element={<ProtectedRoute>   <EditLabPage />      </ProtectedRoute>}/>
+              <Route path="/labs/:id/start" element={<ProtectedRoute>   <LabPage />      </ProtectedRoute>}/>
+              <Route path="/labs/:id/view"  element={<ProtectedRoute>   <LabInstructionPage/></ProtectedRoute>}/>
+              <Route path="/labs/new"       element={<ProtectedRoute>   <CreateLabPage />    </ProtectedRoute>}/>
+
+            </Routes>
           </div>
         </div>
-      </AuthProvider>
+      </div>
   );
 }
 

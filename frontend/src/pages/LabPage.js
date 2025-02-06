@@ -1,24 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Tutorial from './Tutorial';
 import TheiaPanel from './TheiaPanel';
-import markdownContents from './MarkdownText'
+import { useParams } from 'react-router-dom';
+import { startLab } from '../services/labApi';
 
 const LabPage = () => {
-  let markdownContent = `
-# Getting Started with Node.js
-Follow these steps to complete the lab:
-## What You Will Learn
-1. Set up Node.js.
-2. Write and run a simple program.
-3. Customize the project.
-
-**Let's get started!**
-  `;
-
-  markdownContent = markdownContents
+  const { id } = useParams();
+  const [labInfo, setLabInfo] = useState(null);
+  const [containerUrl, setContainerUrl] = useState(null);
   const [leftWidth, setLeftWidth] = useState(50);
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  useEffect(() => {
+    // On mount, call the start-lab endpoint
+    handleStartLab();
+  }, [id]);
+
+  const handleStartLab = async () => {
+    try {
+      const data = await startLab(id);
+      setLabInfo(data.lab);  // the entire lab object
+      setContainerUrl(data.url);
+    } catch (err) {
+      console.error("Cannot start lab", err);
+    }
+  };
+
+  if (!labInfo) return <div>Loading Theia...</div>;
+
+
 
   const handleResize = (e) => {
     const newWidth = ((e.clientX - 64) / (window.innerWidth - 64)) * 100; // Adjust for sidebar width
@@ -36,7 +47,7 @@ Follow these steps to complete the lab:
           }`}"
           style={{ width: `${leftWidth}%` }}
         >
-          <Tutorial markdownContent={markdownContent} />
+          <Tutorial markdownContent={labInfo.instructions} />
         </div>
 
         {/* Resizer */}
@@ -70,7 +81,7 @@ Follow these steps to complete the lab:
         </div>
 
         {/* Theia IDE Section */}
-        <TheiaPanel />
+        <TheiaPanel theiaUrl={containerUrl}/>
       </div>
     </div>
   );

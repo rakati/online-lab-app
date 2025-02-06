@@ -1,5 +1,7 @@
 import docker
 import os
+# from django.utils import timezone
+# from datetime import timedelta
 
 
 def run_theia_container(container_name, port, workspace_dir):
@@ -40,6 +42,10 @@ def run_theia_container(container_name, port, workspace_dir):
         print(
             f"Theia IDE container '{container_name}' is running on http://localhost:{port}"
         )
+        #  TODO handling container remove after duration of time or
+        # inactive
+        # expires_at = timezone.now() + timedelta(minutes=lab_time)
+        # schedule_container_deletion(container_name, expires_at)
         return container
     except docker.errors.APIError as e:
         print(f"Failed to start the container: {e}")
@@ -48,11 +54,9 @@ def run_theia_container(container_name, port, workspace_dir):
 
 # Example usage
 if __name__ == "__main__":
-    container_name = "theia_user_1"  # A unique name for the container
+    container_name = "redone"  # A unique name for the container
     host_port = 4000  # Host port to map to Theia IDE
     workspace_path = "user_1"  # Local directory for the user's workspace
 
     # Start the container
     container = run_theia_container(container_name, host_port, workspace_path)
-
-    # Additional container management logic can be added here

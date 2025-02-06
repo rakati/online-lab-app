@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaSync, FaUser, FaMoon, FaSun } from 'react-icons/fa';
 import { ImLab } from "react-icons/im";
-import { useAuth } from '../context/AuthContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { setLogout } from '../store/userSlice';
 
 const Sidebar = ({ theme, toggleTheme }) => {
-  const { isLoggedIn, logout } = useAuth();
+  const dispatch = useDispatch();
+  const { user, isLoggedIn } = useSelector((state) => state.user);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+  const handleLogout = () => {
+    dispatch(setLogout());
+  };
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setUserMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <aside className="h-full w-16 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col justify-between items-center py-4 border-r border-gray-300 dark:border-gray-700">
@@ -30,7 +46,7 @@ const Sidebar = ({ theme, toggleTheme }) => {
           {theme === 'dark' ? <FaSun size={24} /> : <FaMoon size={24} />}
         </button>
 
-        <Link to="/lab" className="hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded border border-transparent focus:border-blue-500" title="Go to Lab">
+        <Link to="/labs" className="hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded border border-transparent focus:border-blue-500" title="Go to Lab">
           <ImLab size={24} />
         </Link>
 
@@ -45,14 +61,26 @@ const Sidebar = ({ theme, toggleTheme }) => {
 
           {/* User Dropdown Menu */}
           {userMenuOpen && (
-            <div className="absolute bottom-16 left-16 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded shadow-lg w-48 p-2">
+            <div ref={menuRef} className="absolute bottom-16 left-16 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded shadow-lg w-48 p-2">
               {isLoggedIn ? (
                 <>
                   <Link to="/profile" className="block hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded">
                     Profile
                   </Link>
+                  {/* If user is instructor/admin */}
+                  {(user.role === 'instructor' || user.role === 'admin') && (
+                    <Link to="/dashboard" className="block hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded">
+                      Dashboard
+                    </Link>
+                  )}
+                  {/* If user is student */}
+                  {user.role === 'student' && (
+                    <Link to="/my-labs" className="block hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded">
+                      My Labs
+                    </Link>
+                  )}
                   <button
-                    onClick={logout}
+                    onClick={handleLogout}
                     className="block hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded w-full text-left"
                   >
                     Logout
