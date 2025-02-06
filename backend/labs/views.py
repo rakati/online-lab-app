@@ -58,6 +58,7 @@ class LabViewSet(ModelViewSet):
         """
         lab = self.get_object()
         user = request.user
+        serializer = LabSerializer(lab, context={"request": request})
 
         if not lab.participants.filter(id=user.id).exists():
             lab.participants.add(user)
@@ -75,9 +76,10 @@ class LabViewSet(ModelViewSet):
         return Response(
             {
                 "status": "running",
+                "lab": serializer.data,
                 "container_name": container_name,
                 "port": port,
-                "url": f"http://{request.get_host()}:{port}",
+                "url": f"http://localhost:{port}",
             }
         )
 
