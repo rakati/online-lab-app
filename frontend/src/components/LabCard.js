@@ -29,9 +29,9 @@ const LabCard = ({ lab, user, onRefresh }) => {
       <h2 className="text-xl font-bold mb-2">
         <Link to={`/labs/${lab.id}`}>{lab.title}</Link>
       </h2>
-      <p className="text-gray-600 dark:text-gray-400">{lab.description}</p>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Time: {lab.time || 2} hours</p>
-      <p className="text-sm text-gray-500 dark:text-gray-400">Skills: Python, Data Analysis</p>
+      <p className="text-gray-600 dark:text-gray-400">{lab.description_snippet || 'description'}</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Time: {lab.time || 60} min</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400">Skills: {lab.skills || 'Python, Data Analysis'}</p>
       <div className="flex space-x-2 mt-2">
 
         <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">Python</span>
