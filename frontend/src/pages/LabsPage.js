@@ -11,7 +11,7 @@ const LabsPage = () => {
 
   const fetchLabs = async () => {
     try {
-        const res = await fetchLabsApi(); // Custom API call that fetches instructor labs
+      const res = await fetchLabsApi();
         setLabs(res.results);
       } catch (err) {
         console.error(err);
